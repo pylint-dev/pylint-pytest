@@ -110,10 +110,10 @@ class FixtureChecker(BasePytestChecker):
                 is_test_module = True
                 break
 
+        stdout, stderr = sys.stdout, sys.stderr
         try:
             with open(os.devnull, 'w') as devnull:
                 # suppress any future output from pytest
-                stdout, stderr = sys.stdout, sys.stderr
                 sys.stderr = sys.stdout = devnull
 
                 # run pytest session with customized plugin to collect fixtures
@@ -238,11 +238,16 @@ class FixtureChecker(BasePytestChecker):
                     return
 
         # check W0613 unused-argument
-        if msgid == 'unused-argument' and \
-                _can_use_fixture(node.parent.parent) and \
-                isinstance(node.parent, astroid.Arguments) and \
-                node.name in FixtureChecker._pytest_fixtures:
-            return
+        if msgid == 'unused-argument':
+            if _can_use_fixture(node.parent.parent):
+                if isinstance(node.parent, astroid.Arguments):
+                    if node.name in FixtureChecker._pytest_fixtures:
+                        return  # argument is used as a fixture
+                    else:
+                        fixnames = (arg.name for arg in node.parent.args if arg.name in FixtureChecker._pytest_fixtures)
+                        for fixname in fixnames:
+                            if node.name in FixtureChecker._pytest_fixtures[fixname][0].argnames:
+                                return  # argument is used by a fixture
 
         # check W0621 redefined-outer-name
         if msgid == 'redefined-outer-name' and \
