@@ -31,7 +31,6 @@ def _is_pytest_mark(decorator):
 
 
 def _is_pytest_fixture(decorator, fixture=True, yield_fixture=True):
-    attr = None
     to_check = set()
 
     if fixture:
@@ -40,17 +39,38 @@ def _is_pytest_fixture(decorator, fixture=True, yield_fixture=True):
     if yield_fixture:
         to_check.add("yield_fixture")
 
+    def _check_attribute(attr):
+        """
+        handle astroid.Attribute, i.e., when the fixture function is
+        used by importing the pytest module
+        """
+        return attr.attrname in to_check and attr.expr.name == "pytest"
+
+    def _check_name(name_):
+        """
+        handle astroid.Name, i.e., when the fixture function is
+        directly imported
+        """
+        function_name = name_.name
+        module = decorator.root().globals.get(function_name, [None])[0]
+        module_name = module.modname if module else None
+        return function_name in to_check and module_name == "pytest"
+
     try:
+        if isinstance(decorator, astroid.Name):
+            # expecting @fixture
+            return _check_name(decorator)
         if isinstance(decorator, astroid.Attribute):
             # expecting @pytest.fixture
-            attr = decorator
-
+            return _check_attribute(decorator)
         if isinstance(decorator, astroid.Call):
+            func = decorator.func
+            if isinstance(func, astroid.Name):
+                # expecting @fixture(scope=...)
+                return _check_name(func)
             # expecting @pytest.fixture(scope=...)
-            attr = decorator.func
+            return _check_attribute(func)
 
-        if attr and attr.attrname in to_check and attr.expr.name == "pytest":
-            return True
     except AttributeError:
         pass
 

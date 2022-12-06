@@ -30,8 +30,8 @@ class TestRedefinedOuterName(BasePytestTester):
         self.run_linter(enable_plugin)
         self.verify_messages(2)
 
-    @pytest.mark.parametrize('enable_plugin', [True, False])
+    @pytest.mark.parametrize("enable_plugin", [True, False])
     def test_direct_import(self, enable_plugin):
-        """the fixture method is directly imported """
+        """the fixture method is directly imported"""
         self.run_linter(enable_plugin)
         self.verify_messages(0 if enable_plugin else 3)
