@@ -1,0 +1,85 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+        exclude: ^.idea/
+      - id: trailing-whitespace
+      - id: pretty-format-json
+        args: [ "--no-sort-keys", "--autofix", "--indent=4" ]
+        exclude: ^.vscode/
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.0
+    hooks:
+      - id: pyupgrade
+        args:
+          - --py36-plus
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.2.1
+    hooks:
+      - id: autoflake
+  # - repo: https://github.com/astral-sh/ruff-pre-commit
+  #   rev: v0.0.292
+  #   hooks:
+  #     - id: ruff
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args:
+          - --filter-files
+  - repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+      - id: black
+  - repo: https://github.com/asottile/blacken-docs
+    rev: 1.16.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies:
+          - black==22.6.0
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-use-type-annotations
+      - id: python-check-blanket-noqa
+      - id: python-check-blanket-type-ignore
+      - id: python-check-mock-methods
+      - id: python-no-eval
+      - id: python-no-log-warn
+      - id: python-use-type-annotations
+      - id: rst-backticks
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
+      - id: text-unicode-replacement-char
+  # - repo: https://github.com/pycqa/flake8
+  #   rev: 5.0.4
+  #   hooks:
+  #     - id: flake8
+  #       additional_dependencies:
+  #         - flake8-bandit
+  #         - flake8-bugbear
+  #         - flake8-class-attributes-order
+  #         - flake8-comprehensions
+  #         # - flake8-docstrings  # it is a mess to clean up; let's only warn user's IDEs instead.
+  #         - flake8-future-annotations
+  #         - flake8-noqa
+  #         - flake8-print
+  #         - flake8-pyproject
+  #         - flake8-pytest-style
+  #         - flake8-type-checking
+  #         - flake8-variables-names
+  #         - pep8-naming
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.6.0
+  #   hooks:
+  #     - id: mypy
+  # - repo: local
+  #   hooks:
+  #     - id: pylint
+  #       name: pylint
+  #       entry: bash -c 'test -d .venv && . .venv/bin/activate ; pylint ${CI:+--reports=yes} "$@"' -
+  #       language: system
+  #       types: [ python ]
+  #       args:
+  #         - --disable=R,C

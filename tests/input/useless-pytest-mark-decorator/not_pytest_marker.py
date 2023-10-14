@@ -6,14 +6,11 @@ def noop(func):
     @functools.wraps(func)
     def wrapper_noop(*args, **kwargs):
         return func(*args, **kwargs)
+
     return wrapper_noop
 
 
-PYTEST = SimpleNamespace(
-    MARK=SimpleNamespace(
-        noop=noop
-    )
-)
+PYTEST = SimpleNamespace(MARK=SimpleNamespace(noop=noop))
 
 
 @noop

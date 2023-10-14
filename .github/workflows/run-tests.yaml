@@ -52,6 +52,7 @@ jobs:
     - name: Test with tox
       env:
         FORCE_COLOR: 1
+        PYTEST_CI_ARGS: --cov-report=xml --cov-report=html --junitxml=test_artifacts/test_report.xml --color=yes
       run: tox ${{ matrix.python-version == '3.6' && '--skip-missing-interpreters=true' || '' }}
 
     - name: Upload coverage reports to Codecov

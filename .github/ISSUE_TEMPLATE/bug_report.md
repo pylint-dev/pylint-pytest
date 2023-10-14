@@ -12,7 +12,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Package versions
-- pylint 
+- pylint
 - pytest
 - pylint-pytest
 

@@ -1,9 +1,9 @@
 import pytest
 
 
-class TestClass(object):
+class TestClass:
     @staticmethod
-    @pytest.fixture(scope='class', autouse=True)
+    @pytest.fixture(scope="class", autouse=True)
     def setup_class(request):
         clls = request.cls
         clls.defined_in_setup_class = 123

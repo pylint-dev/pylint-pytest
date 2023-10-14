@@ -51,7 +51,10 @@ def test_something(conftest_fixture):  # <- Unused argument 'conftest_fixture'
 FP when an imported fixture is used in an applicable function, e.g.
 
 ```python
-from fixture_collections import imported_fixture  # <- Unused imported_fixture imported from fixture_collections
+from fixture_collections import (
+    imported_fixture,
+)  # <- Unused imported_fixture imported from fixture_collections
+
 
 def test_something(imported_fixture):
     ...
@@ -64,7 +67,10 @@ FP when an imported/declared fixture is used in an applicable function, e.g.
 ```python
 from fixture_collections import imported_fixture
 
-def test_something(imported_fixture):  # <- Redefining name 'imported_fixture' from outer scope (line 1)
+
+def test_something(
+    imported_fixture,
+):  # <- Redefining name 'imported_fixture' from outer scope (line 1)
     ...
 ```
 
@@ -75,15 +81,18 @@ FP when class attributes are defined in setup fixtures
 ```python
 import pytest
 
+
 class TestClass(object):
     @staticmethod
-    @pytest.fixture(scope='class', autouse=True)
+    @pytest.fixture(scope="class", autouse=True)
     def setup_class(request):
         cls = request.cls
         cls.defined_in_setup_class = True
 
     def test_foo(self):
-        assert self.defined_in_setup_class  # <- Instance of 'TestClass' has no 'defined_in_setup_class' member
+        assert (
+            self.defined_in_setup_class
+        )  # <- Instance of 'TestClass' has no 'defined_in_setup_class' member
 ```
 
 ## Raise new warning(s)
@@ -94,6 +103,7 @@ Raise when using deprecated `@pytest.yield_fixture` decorator ([ref](https://doc
 
 ```python
 import pytest
+
 
 @pytest.yield_fixture  # <- Using a deprecated @pytest.yield_fixture decorator
 def yield_fixture():
@@ -107,12 +117,16 @@ Raise when using every `@pytest.mark.*` for the fixture ([ref](https://docs.pyte
 ```python
 import pytest
 
+
 @pytest.fixture
 def awesome_fixture():
     ...
 
+
 @pytest.fixture
-@pytest.mark.usefixtures("awesome_fixture")  # <- Using useless `@pytest.mark.*` decorator for fixtures
+@pytest.mark.usefixtures(
+    "awesome_fixture"
+)  # <- Using useless `@pytest.mark.*` decorator for fixtures
 def another_awesome_fixture():
     ...
 ```
@@ -123,6 +137,7 @@ Raise when using deprecated positional arguments for fixture decorator ([ref](ht
 
 ```python
 import pytest
+
 
 @pytest.fixture("module")  # <- Using a deprecated positional arguments for fixture
 def awesome_fixture():

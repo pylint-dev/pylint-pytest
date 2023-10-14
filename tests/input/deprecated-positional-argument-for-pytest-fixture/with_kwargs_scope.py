@@ -1,6 +1,6 @@
 import pytest
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def some_fixture():
-    return 'ok'
+    return "ok"
