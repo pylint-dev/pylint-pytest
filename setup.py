@@ -24,7 +24,7 @@ setup(
     long_description_content_type='text/markdown',
     packages=find_packages(exclude=['tests', 'sandbox']),
     install_requires=[
-        'pylint',
+        'pylint<3',
         'pytest>=4.6',
     ],
     python_requires='>=3.6',
@@ -39,10 +39,12 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: Implementation :: CPython',
         'Operating System :: OS Independent',
         'License :: OSI Approved :: MIT License',
     ],
-    tests_require=['pytest', 'pylint'],
+    tests_require=['pytest', 'pytest-cov', 'pylint'],
     keywords=['pylint', 'pytest', 'plugin'],
 )
