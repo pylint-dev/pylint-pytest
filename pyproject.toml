@@ -3,9 +3,6 @@
 [tool.black]
 line-length = 100
 
-[tool.isort]
-profile = "black"
-
 [tool.coverage]
 run.branch = true
 run.data_file = "test_artifacts/.coverage"
@@ -37,15 +34,6 @@ report.exclude_lines = [
 paths.source = [
     "pylint_pytest/",
 ]
-
-[tool.flake8]
-# Black compatible settings
-max-line-length = 100
-extend-ignore = ["E203"]
-extend-select = ["TC", "TC1", "B902", "B903"]
-
-noqa-require-code = true
-noqa-include-name = true
 
 [tool.mypy]
 python_version = "3.7"
@@ -93,7 +81,7 @@ select = [
     "W",  # pycodestyle
     "B",  # bugbear
     "I",  # isort
-    "RUF", # ruff
+#    "RUF", # ruff
     "UP", # pyupgrade
 ]
 

@@ -49,6 +49,6 @@ class ClassAttrLoader(BasePytestChecker):
 
                 # hack class locals
                 self.class_node.locals[node.attrname] = [assign_node.value]
-            except:  # pylint: disable=bare-except
+            except Exception:  # pylint: disable=broad-except
                 # cannot find valid assign expr, skipping the entire attribute
                 pass
