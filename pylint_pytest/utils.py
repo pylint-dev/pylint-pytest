@@ -115,6 +115,6 @@ def _is_same_module(fixtures, import_node, fixture_name):
                     ).file
                 ):
                     return True
-    except:  # pylint: disable=bare-except
+    except Exception:  # pylint: disable=broad-except
         pass
     return False

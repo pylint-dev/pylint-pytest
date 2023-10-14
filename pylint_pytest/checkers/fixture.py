@@ -62,7 +62,8 @@ class FixtureChecker(BasePytestChecker):
         "F6401": (
             (
                 "pylint-pytest plugin cannot enumerate and collect pytest fixtures. "
-                "Please run `pytest --fixtures --collect-only path/to/current/module.py` and resolve any potential syntax error or package dependency issues"
+                "Please run `pytest --fixtures --collect-only path/to/current/module.py`"
+                " and resolve any potential syntax error or package dependency issues"
             ),
             "cannot-enumerate-pytest-fixtures",
             "Used when pylint-pytest has been unable to enumerate and collect pytest fixtures.",
