@@ -81,8 +81,12 @@ select = [
     "W",  # pycodestyle
     "B",  # bugbear
     "I",  # isort
-#    "RUF", # ruff
+    "RUF", # ruff
     "UP", # pyupgrade
+]
+
+ignore = [
+    "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
 ]
 
 [tool.ruff.pydocstyle]
