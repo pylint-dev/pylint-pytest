@@ -1,0 +1,92 @@
+# Only a configuration storage, for now
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.coverage]
+run.branch = true
+run.data_file = "test_artifacts/.coverage"
+xml.output = "test_artifacts/cobertura.xml"
+html.directory = "test_artifacts/htmlcov"
+report.exclude_lines = [
+    # Have to re-enable the standard pragma
+    'pragma: no cover',
+    # Don't complain about missing debug-only code:
+    'def __repr__',
+    'if self\.debug',
+    'if settings.DEBUG',
+    # Don't complain if tests don't hit defensive assertion code:
+    'raise AssertionError',
+    'raise NotImplementedError',
+    # Don't complain if non-runnable code isn't run:
+    'if 0:',
+    'if __name__ == .__main__.:',
+    # Don't complain about abstract methods, they aren't run:
+    '@(abc\.)?abstractmethod',
+    'class .*\bProtocol\):',
+    ## Defaults must be re-listed; we cannot `extend_exclude_lines`
+
+    # Ignore type-checking blocks
+    'if TYPE_CHECKING:',
+    # Defensive programming does not need to be covered
+    'raise UnreachableCodeException',
+]
+paths.source = [
+    "pylint_pytest/",
+]
+
+[tool.flake8]
+# Black compatible settings
+max-line-length = 120
+extend-ignore = ["E203"]
+extend-select = ["TC", "TC1", "B902", "B903"]
+
+noqa-require-code = true
+noqa-include-name = true
+
+[tool.mypy]
+python_version = "3.6"
+mypy_path = "src/"
+check_untyped_defs = true
+explicit_package_bases = true
+namespace_packages = true
+show_error_codes = true
+strict_optional = true
+warn_redundant_casts = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+exclude = [
+    "^.venv", #  Ignore installed packages
+    "^.cache", # Ignore CI-defined .cache
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "tests.*",
+]
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+addopts = "--verbose --cov-config=pyproject.toml"
+
+[tool.ruff]
+# ruff is less lenient than pylint and does not make any exceptions
+# (for docstrings, strings and comments in particular).
+line-length = 120
+
+select = [
+    "E",  # pycodestyle
+    "F",  # pyflakes
+    "W",  # pycodestyle
+    "B",  # bugbear
+    "I",  # isort
+    "RUF", # ruff
+    "UP", # pyupgrade
+]
+
+[tool.ruff.pydocstyle]
+convention = "google"
