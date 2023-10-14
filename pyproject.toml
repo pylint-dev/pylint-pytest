@@ -107,3 +107,51 @@ convention = "google"
     "S311", # Standard pseudo-random generators are not suitable for cryptographic purposes
     "PLR2004", # Magic value used in comparison
 ]
+
+[tool.pylint]
+
+load-plugins= [
+    "pylint_pytest",
+    "pylint.extensions.bad_builtin",
+    "pylint.extensions.broad_try_clause",
+    "pylint.extensions.check_elif",
+    "pylint.extensions.code_style",
+    "pylint.extensions.comparetozero",
+    "pylint.extensions.comparison_placement",
+    "pylint.extensions.confusing_elif",
+    # "pylint.extensions.consider_ternary_expression", # Not a pretty refactoring
+    "pylint.extensions.docparams",
+    "pylint.extensions.docstyle",
+    "pylint.extensions.emptystring",
+    "pylint.extensions.eq_without_hash",
+    "pylint.extensions.for_any_all",
+    "pylint.extensions.mccabe",
+    "pylint.extensions.no_self_use",
+    "pylint.extensions.overlapping_exceptions",
+    "pylint.extensions.redefined_loop_name",
+    "pylint.extensions.redefined_variable_type",
+    "pylint.extensions.typing",
+    # "pylint.extensions.while_used",  # highly opinionated
+    "pylint.extensions.dict_init_mutate",
+    "pylint.extensions.dunder",
+    "pylint.extensions.typing",
+    # "pylint.extensions.magic_value",  # highly opinionated
+]
+disable=[
+    "unspecified-encoding",
+    "fixme",
+    "missing-docstring",
+    "attribute-defined-outside-init",
+    "use-maxsplit-arg",
+    "used-before-assignment",
+    "too-many-arguments",
+    "too-many-nested-blocks",
+    "too-many-try-statements",
+    "redefined-loop-name",
+    "docstring-first-line-empty",
+    "confusing-consecutive-elif",
+    "too-complex",
+    "cannot-enumerate-pytest-fixtures",  # our own message, fix first
+    "duplicate-code",
+]
+ignore-paths="tests/input"
