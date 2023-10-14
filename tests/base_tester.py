@@ -23,7 +23,7 @@ class BasePytestTester:
     CHECKER_CLASS = BaseChecker
     IMPACTED_CHECKER_CLASSES = []
     MSG_ID = None
-    MESSAGES = None
+    msgs = None
     CONFIG = {}
 
     enable_plugin = True
@@ -42,18 +42,18 @@ class BasePytestTester:
             module.file = fin.name
 
         self.walk(module)  # run all checkers
-        self.MESSAGES = self.linter.release_messages()
+        self.msgs = self.linter.release_messages()
 
     def verify_messages(self, msg_count, msg_id=None):
         msg_id = msg_id or self.MSG_ID
 
         matched_count = 0
-        for message in self.MESSAGES:
+        for message in self.msgs:
             # only care about ID and count, not the content
             if message.msg_id == msg_id:
                 matched_count += 1
 
-        pprint(self.MESSAGES)
+        pprint(self.msgs)
         assert matched_count == msg_count, f"expecting {msg_count}, actual {matched_count}"
 
     def setup_method(self):

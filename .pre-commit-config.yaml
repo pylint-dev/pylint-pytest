@@ -1,3 +1,6 @@
+ci:
+  skip: [pylint]
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
@@ -42,12 +45,12 @@ repos:
   #   rev: v1.6.0
   #   hooks:
   #     - id: mypy
-  # - repo: local
-  #   hooks:
-  #     - id: pylint
-  #       name: pylint
-  #       entry: bash -c 'test -d .venv && . .venv/bin/activate ; pylint ${CI:+--reports=yes} "$@"' -
-  #       language: system
-  #       types: [ python ]
-  #       args:
-  #         - --disable=R,C
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: bash -c 'test -d .venv && . .venv/bin/activate ; pylint "$@"' -
+        language: system
+        types: [ python ]
+        exclude: "tests/input/"
+        args: ["-sn", "-rn"]
