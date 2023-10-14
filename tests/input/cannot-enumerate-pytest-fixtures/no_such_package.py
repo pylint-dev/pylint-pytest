@@ -6,5 +6,6 @@ import this_is_invalid  # makes pytest fail
 def fixture():
     pass
 
+
 def test_something(fixture):
     pass

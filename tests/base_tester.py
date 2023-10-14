@@ -1,23 +1,25 @@
-import sys
 import os
+import sys
 from pprint import pprint
 
 import astroid
 from pylint.testutils import UnittestLinter
+
 try:
     from pylint.utils import ASTWalker
 except ImportError:
     # for pylint 1.9
     from pylint.utils import PyLintASTWalker as ASTWalker
+
 from pylint.checkers import BaseChecker
 
 import pylint_pytest.checkers.fixture
 
 # XXX: allow all file name
-pylint_pytest.checkers.fixture.FILE_NAME_PATTERNS = ('*', )
+pylint_pytest.checkers.fixture.FILE_NAME_PATTERNS = ("*",)
 
 
-class BasePytestTester(object):
+class BasePytestTester:
     CHECKER_CLASS = BaseChecker
     IMPACTED_CHECKER_CLASSES = []
     MSG_ID = None
@@ -31,9 +33,8 @@ class BasePytestTester(object):
 
         # pylint: disable=protected-access
         if file_path is None:
-            module = sys._getframe(1).f_code.co_name.replace('test_', '', 1)
-            file_path = os.path.join(
-                os.getcwd(), 'tests', 'input', self.MSG_ID, module + '.py')
+            module = sys._getframe(1).f_code.co_name.replace("test_", "", 1)
+            file_path = os.path.join(os.getcwd(), "tests", "input", self.MSG_ID, module + ".py")
 
         with open(file_path) as fin:
             content = fin.read()
@@ -53,7 +54,7 @@ class BasePytestTester(object):
                 matched_count += 1
 
         pprint(self.MESSAGES)
-        assert matched_count == msg_count, f'expecting {msg_count}, actual {matched_count}'
+        assert matched_count == msg_count, f"expecting {msg_count}, actual {matched_count}"
 
     def setup_method(self):
         self.linter = UnittestLinter()
