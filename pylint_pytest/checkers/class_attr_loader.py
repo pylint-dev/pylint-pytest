@@ -32,7 +32,7 @@ class ClassAttrLoader(BasePytestChecker):
             and node.value.expr.name == "request"
         ):
             # storing the aliases for cls from request.cls
-            self.request_cls = set(map(lambda t: t.name, node.targets))
+            self.request_cls = set(t.name for t in node.targets)
 
     def visit_assignattr(self, node):
         if (

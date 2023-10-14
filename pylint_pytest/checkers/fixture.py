@@ -20,6 +20,9 @@ from . import BasePytestChecker
 
 # TODO: support pytest python_files configuration
 FILE_NAME_PATTERNS = ("test_*.py", "*_test.py")
+ARGUMENT_ARE_KEYWORD_ONLY = (
+    "https://docs.pytest.org/en/stable/deprecations.html#pytest-fixture-arguments-are-keyword-only"
+)
 
 
 class FixtureCollector:
@@ -56,7 +59,7 @@ class FixtureChecker(BasePytestChecker):
             "deprecated-positional-argument-for-pytest-fixture",
             (
                 "Pass scope as a kwarg, not positional arg, which is deprecated in future pytest. "
-                "Take a look at: https://docs.pytest.org/en/stable/deprecations.html#pytest-fixture-arguments-are-keyword-only"
+                f"Take a look at: {ARGUMENT_ARE_KEYWORD_ONLY}"
             ),
         ),
         "F6401": (
