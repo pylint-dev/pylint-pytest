@@ -52,5 +52,4 @@ repos:
         entry: bash -c 'test -d .venv && . .venv/bin/activate ; pylint "$@"' -
         language: system
         types: [ python ]
-        exclude: "tests/input/"
         args: ["-sn", "-rn"]
