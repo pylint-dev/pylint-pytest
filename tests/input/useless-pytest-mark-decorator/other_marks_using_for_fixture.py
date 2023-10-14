@@ -12,7 +12,7 @@ def fixture():
 @pytest.mark.parametrize("id", range(2))
 @pytest.fixture
 def fixture_with_params(id):
-    return "{} not OK".format(id)
+    return f"{id} not OK"
 
 
 @pytest.mark.custom_mark

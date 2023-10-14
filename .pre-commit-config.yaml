@@ -8,12 +8,12 @@ repos:
       - id: pretty-format-json
         args: [ "--no-sort-keys", "--autofix", "--indent=4" ]
         exclude: ^.vscode/
-  # - repo: https://github.com/asottile/pyupgrade
-  #   rev: v3.13.0
-  #   hooks:
-  #     - id: pyupgrade
-  #       args:
-  #         - --py36-plus
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.0
+    hooks:
+      - id: pyupgrade
+        args:
+          - --py36-plus
   - repo: https://github.com/PyCQA/autoflake
     rev: v2.2.1
     hooks:
