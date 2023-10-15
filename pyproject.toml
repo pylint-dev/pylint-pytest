@@ -110,6 +110,8 @@ convention = "google"
 
 [tool.pylint]
 
+ignore-paths="tests/input" # Ignore test inputs
+
 load-plugins= [
     "pylint_pytest",
     "pylint.extensions.bad_builtin",
@@ -138,20 +140,21 @@ load-plugins= [
     # "pylint.extensions.magic_value",  # highly opinionated
 ]
 disable=[
-    "unspecified-encoding",
-    "fixme",
-    "missing-docstring",
+    "docstring-first-line-empty",  # C0199; not-an-issue
+
+    # Temporary disables
+    "cannot-enumerate-pytest-fixtures",  # ToDo: Our own message, fix first
+    "fixme",  # needs-work, and probably regex
     "attribute-defined-outside-init",
-    "use-maxsplit-arg",
-    "used-before-assignment",
+    "confusing-consecutive-elif",
+    "duplicate-code",
+    "missing-docstring",
+    "redefined-loop-name",
+    "too-complex",
     "too-many-arguments",
     "too-many-nested-blocks",
     "too-many-try-statements",
-    "redefined-loop-name",
-    "docstring-first-line-empty",
-    "confusing-consecutive-elif",
-    "too-complex",
-    "cannot-enumerate-pytest-fixtures",  # our own message, fix first
-    "duplicate-code",
+    "unspecified-encoding",
+    "use-maxsplit-arg",
+    "used-before-assignment",
 ]
-ignore-paths="tests/input"
