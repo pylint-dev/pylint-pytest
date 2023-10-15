@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [1.1.3] - 2023-10-15
+
+### Fixed
+- The continuous integration was fixed, as a new maintenance team was assembled.
+
+
 ## [1.1.2] - 2021-04-19
 ### Fixed
 - Fix #18 plugin crash when test case is marked with a non-pytest.mark decorator
