@@ -20,20 +20,11 @@ jobs:
           - windows-latest
           - macos-latest
         python-version:
-          - '3.6'
-          - '3.7'
           - '3.8'
           - '3.9'
           - '3.10'
           - '3.11'
-          # - '3.12'  # FixMe: https://github.com/pylint-dev/pylint-pytest/issues/3
-        # Python 3.6 is not available in `ubuntu-latest`.
-        exclude:
-          - python-version: '3.6'
-            os: ubuntu-latest
-        include:
-          - python-version: '3.6'
-            os: ubuntu-20.04
+#          - '3.12'  # FixMe: https://github.com/pylint-dev/pylint-pytest/issues/3
 
     defaults:
       run:
@@ -61,7 +52,7 @@ jobs:
         env:
           FORCE_COLOR: 1
           PYTEST_CI_ARGS: --cov-report=xml --cov-report=html --junitxml=test_artifacts/test_report.xml --color=yes
-        run: tox ${{ matrix.python-version == '3.6' && '--skip-missing-interpreters=true' || '' }}
+        run: tox --skip-missing-interpreters=true
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Removed
+
+- Support for Python 3.6 & 3.7 (#23)
+
 ## [1.1.3] - 2023-10-23
 
 This is the first release after maintenance was assumed by https://github.com/stdedos.
