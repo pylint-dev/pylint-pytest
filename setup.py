@@ -11,11 +11,9 @@ with open(path.join(here, "README.md")) as fin:
 
 setup(
     name="pylint-pytest",
-    version="1.1.2",
-    author="Reverb Chu",
-    author_email="pylint-pytest@reverbc.tw",
-    maintainer="Reverb Chu",
-    maintainer_email="pylint-pytest@reverbc.tw",
+    version="1.1.3a0",
+    author="Stavros Ntentos",
+    author_email="133706+stdedos@users.noreply.github.com",
     license="MIT",
     url="https://github.com/reverbc/pylint-pytest",
     description="A Pylint plugin to suppress pytest-related false positives.",
