@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Removed
+
+- Support for Python 3.6 & 3.7 (#23)
+
 ## [1.1.6] - 2023-11-20
 
 This is a small bugfix release.
