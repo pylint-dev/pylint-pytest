@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 import os
 import sys
 from abc import ABC
 from pprint import pprint
-from typing import Any
+from typing import Any, Dict, List
 
 import astroid
 from pylint.testutils import MessageTest, UnittestLinter
@@ -25,10 +23,10 @@ pylint_pytest.checkers.fixture.FILE_NAME_PATTERNS = ("*",)
 
 class BasePytestTester(ABC):
     CHECKER_CLASS = BaseChecker
-    IMPACTED_CHECKER_CLASSES: list[BaseChecker] = []
+    IMPACTED_CHECKER_CLASSES: List[BaseChecker] = []
     MSG_ID: str
-    msgs: list[MessageTest] = []
-    CONFIG: dict[str, Any] = {}
+    msgs: List[MessageTest] = []
+    CONFIG: Dict[str, Any] = {}
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)

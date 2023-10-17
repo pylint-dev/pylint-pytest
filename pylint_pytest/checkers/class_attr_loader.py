@@ -1,4 +1,4 @@
-from __future__ import annotations
+from typing import Optional, Set
 
 from astroid import Assign, Attribute, ClassDef, Name
 from pylint.interfaces import IAstroidChecker
@@ -12,8 +12,8 @@ class ClassAttrLoader(BasePytestChecker):
     msgs = {"E6400": ("", "pytest-class-attr-loader", "")}
 
     in_setup = False
-    request_cls: set[str] = set()
-    class_node: ClassDef | None = None
+    request_cls: Set[str] = set()
+    class_node: Optional[ClassDef] = None
 
     def visit_functiondef(self, node):
         """determine if a method is a class setup method"""

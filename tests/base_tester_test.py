@@ -20,7 +20,7 @@ def test_init_subclass_no_msg_id():
             pass
 
 
-@pytest.mark.parametrize("msg_id", [123, None, ""], ids=lambda msg_id: f"{msg_id=}")
+@pytest.mark.parametrize("msg_id", [123, None, ""], ids=lambda x: f"msg_id={x}")
 def test_init_subclass_invalid_msg_id_type(msg_id):
     with pytest.raises(TypeError):
 
