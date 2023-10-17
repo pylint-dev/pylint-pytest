@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import fnmatch
 import os
 import sys
@@ -17,17 +19,19 @@ from ..utils import (
     _is_same_module,
 )
 from . import BasePytestChecker
+from .types import FixtureDict, replacement_add_message
 
 # TODO: support pytest python_files configuration
-FILE_NAME_PATTERNS = ("test_*.py", "*_test.py")
+FILE_NAME_PATTERNS: tuple[str, ...] = ("test_*.py", "*_test.py")
 ARGUMENT_ARE_KEYWORD_ONLY = (
     "https://docs.pytest.org/en/stable/deprecations.html#pytest-fixture-arguments-are-keyword-only"
 )
 
 
 class FixtureCollector:
-    fixtures = {}
-    errors = set()
+    # Same as ``_pytest.fixtures.FixtureManager._arg2fixturedefs``.
+    fixtures: FixtureDict = {}
+    errors: set[pytest.CollectReport] = set()
 
     def pytest_sessionfinish(self, session):
         # pylint: disable=protected-access
@@ -73,10 +77,13 @@ class FixtureChecker(BasePytestChecker):
         ),
     }
 
-    _pytest_fixtures = {}
-    _invoked_with_func_args = set()
-    _invoked_with_usefixtures = set()
-    _original_add_message = callable
+    # Store all fixtures discovered by pytest session
+    _pytest_fixtures: FixtureDict = {}
+    # Stores all used function arguments
+    _invoked_with_func_args: set[str] = set()
+    # Stores all invoked fixtures through @pytest.mark.usefixture(...)
+    _invoked_with_usefixtures: set[str] = set()
+    _original_add_message = replacement_add_message
 
     def open(self):
         # patch VariablesChecker.add_message
@@ -87,7 +94,7 @@ class FixtureChecker(BasePytestChecker):
         """restore & reset class attr for testing"""
         # restore add_message
         VariablesChecker.add_message = FixtureChecker._original_add_message
-        FixtureChecker._original_add_message = callable
+        FixtureChecker._original_add_message = replacement_add_message
 
         # reset fixture info storage
         FixtureChecker._pytest_fixtures = {}
@@ -100,14 +107,9 @@ class FixtureChecker(BasePytestChecker):
         - invoke pytest session to collect available fixtures
         - create containers for the module to store args and fixtures
         """
-        # storing all fixtures discovered by pytest session
-        FixtureChecker._pytest_fixtures = {}  # Dict[List[_pytest.fixtures.FixtureDef]]
-
-        # storing all used function arguments
-        FixtureChecker._invoked_with_func_args = set()  # Set[str]
-
-        # storing all invoked fixtures through @pytest.mark.usefixture(...)
-        FixtureChecker._invoked_with_usefixtures = set()  # Set[str]
+        FixtureChecker._pytest_fixtures = {}
+        FixtureChecker._invoked_with_func_args = set()
+        FixtureChecker._invoked_with_usefixtures = set()
 
         is_test_module = False
         for pattern in FILE_NAME_PATTERNS:

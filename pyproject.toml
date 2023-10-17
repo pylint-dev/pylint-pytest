@@ -89,6 +89,9 @@ ignore = [
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
 ]
 
+# py36, but ruff does not support it :/
+target-version = "py37"
+
 [tool.ruff.pydocstyle]
 convention = "google"
 
@@ -109,6 +112,8 @@ convention = "google"
 ]
 
 [tool.pylint]
+
+py-version = "3.6"
 
 ignore-paths="tests/input" # Ignore test inputs
 

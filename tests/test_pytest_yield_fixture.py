@@ -5,7 +5,6 @@ from pylint_pytest.checkers.fixture import FixtureChecker
 
 class TestDeprecatedPytestYieldFixture(BasePytestTester):
     CHECKER_CLASS = FixtureChecker
-    IMPACTED_CHECKER_CLASSES = []
     MSG_ID = "deprecated-pytest-yield-fixture"
 
     def test_smoke(self):
