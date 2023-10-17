@@ -6,7 +6,6 @@ import os
 from .checkers import BasePytestChecker
 
 
-# pylint: disable=protected-access
 def register(linter):
     """auto discover pylint checker classes"""
     dirname = os.path.dirname(__file__)
