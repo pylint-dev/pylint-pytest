@@ -158,3 +158,15 @@ disable=[
     "use-maxsplit-arg",
     "used-before-assignment",
 ]
+
+[tool.pylint.design]
+max-args = 7
+
+[tool.pylint.reports]
+output-format = "colorized"
+
+[tool.pylint.variables]
+ignored-argument-names = "_.*"
+
+[tool.pylint."messages control"]
+enable = ["useless-suppression"]
