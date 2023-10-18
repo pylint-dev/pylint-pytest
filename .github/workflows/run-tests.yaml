@@ -41,6 +41,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Slugify GITHUB_REPOSITORY
+      run: echo "GITHUB_REPOSITORY_SLUG=${GITHUB_REPOSITORY////_}" >> $GITHUB_ENV
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -71,5 +74,5 @@ jobs:
       uses: actions/upload-artifact@v3
       if: ${{ !cancelled() }}
       with:
-        name: test-artifacts_${{ matrix.os }}_${{ matrix.python-version }}
+        name: ${{ env.GITHUB_REPOSITORY_SLUG }}_test-artifacts_${{ github.event_name }}_${{ github.event.pull_request.number || github.sha }}_${{ matrix.os }}_py${{ matrix.python-version }}
         path: test_artifacts/
