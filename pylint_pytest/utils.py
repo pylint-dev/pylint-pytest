@@ -108,12 +108,11 @@ def _is_same_module(fixtures, import_node, fixture_name):
     try:
         for fixture in fixtures[fixture_name]:
             for import_from in import_node.root().globals[fixture_name]:
-                if (
-                    inspect.getmodule(fixture.func).__file__
-                    == import_from.parent.import_module(
-                        import_from.modname, False, import_from.level
-                    ).file
-                ):
+                module = inspect.getmodule(fixture.func)
+                parent_import = import_from.parent.import_module(
+                    import_from.modname, False, import_from.level
+                )
+                if module is not None and module.__file__ == parent_import.file:
                     return True
     except Exception:  # pylint: disable=broad-except
         pass
