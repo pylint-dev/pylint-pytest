@@ -68,8 +68,8 @@ class FixtureChecker(BasePytestChecker):
         "F6401": (
             (
                 "pylint-pytest plugin cannot enumerate and collect pytest fixtures. "
-                "Please run `pytest --fixtures --collect-only path/to/current/module.py`"
-                " and resolve any potential syntax error or package dependency issues"
+                "Please run `pytest --fixtures --collect-only %s` and resolve "
+                "any potential syntax error or package dependency issues"
             ),
             "cannot-enumerate-pytest-fixtures",
             "Used when pylint-pytest has been unable to enumerate and collect pytest fixtures.",
@@ -143,8 +143,23 @@ class FixtureChecker(BasePytestChecker):
 
                 FixtureChecker._pytest_fixtures = fixture_collector.fixtures
 
-                if (ret != pytest.ExitCode.OK or fixture_collector.errors) and is_test_module:
-                    self.add_message("cannot-enumerate-pytest-fixtures", node=node)
+                legitimate_failure_paths = set(
+                    collection_report.nodeid
+                    for collection_report in fixture_collector.errors
+                    if any(
+                        fnmatch.fnmatch(
+                            Path(collection_report.nodeid).name,
+                            pattern,
+                        )
+                        for pattern in FILE_NAME_PATTERNS
+                    )
+                )
+                if (ret != pytest.ExitCode.OK or legitimate_failure_paths) and is_test_module:
+                    self.add_message(
+                        "cannot-enumerate-pytest-fixtures",
+                        args=" ".join(legitimate_failure_paths | {node.file}),
+                        node=node,
+                    )
         finally:
             # restore output devices
             sys.stdout, sys.stderr = stdout, stderr
