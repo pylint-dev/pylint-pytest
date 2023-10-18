@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -59,5 +63,13 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        flags: ${{ matrix.os }},${{ matrix.python-version }}
         fail_ci_if_error: true
         files: test_artifacts/cobertura.xml
+
+    - name: Create artifacts
+      uses: actions/upload-artifact@v3
+      if: ${{ !cancelled() }}
+      with:
+        name: test-artifacts_${{ matrix.os }}_${{ matrix.python-version }}
+        path: test_artifacts/
