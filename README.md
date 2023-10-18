@@ -4,6 +4,7 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dd/pylint-pytest)
 ![PyPI - Version](https://img.shields.io/pypi/v/pylint-pytest)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pylint-pytest)
+[![codecov](https://codecov.io/gh/pylint-dev/pylint-pytest/graph/badge.svg?token=NhZDLKmomd)](https://codecov.io/gh/pylint-dev/pylint-pytest)
 
 A Pylint plugin to suppress pytest-related false positives.
 
