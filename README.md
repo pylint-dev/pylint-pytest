@@ -1,9 +1,9 @@
 # pylint-pytest
 
-[![Python package](https://github.com/pylint-dev/pylint-pytest/actions/workflows/run-tests.yaml/badge.svg)](https://github.com/pylint-dev/pylint-pytest/actions/workflows/run-tests.yaml)
-[![PyPI version fury.io](https://badge.fury.io/py/pylint-pytest.svg)](https://pypi.python.org/pypi/pylint-pytest/)
-[![Travis CI](https://travis-ci.org/reverbc/pylint-pytest.svg?branch=master)](https://travis-ci.org/reverbc/pylint-pytest)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/reverbc/pylint-pytest?branch=master&svg=true)](https://ci.appveyor.com/project/reverbc/pylint-pytest)
+[![Github - Testing](https://github.com/pylint-dev/pylint-pytest/actions/workflows/run-tests.yaml/badge.svg)](https://github.com/pylint-dev/pylint-pytest/actions/workflows/run-tests.yaml)
+![PyPI - Downloads](https://img.shields.io/pypi/dd/pylint-pytest)
+![PyPI - Version](https://img.shields.io/pypi/v/pylint-pytest)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pylint-pytest)
 
 A Pylint plugin to suppress pytest-related false positives.
 
