@@ -24,6 +24,7 @@ A heartfelt thank you to https://github.com/Pierre-Sassoulas for his invaluable 
 
 - Added an extensive `.pre-commit-config.yaml` file to upkeep the code quality.
   It includes, among others, `black`, `mypy` (in non-strict mode yet), `ruff`, and `pylint`.
+- Added an automated release process
 
 ### Changed
 
