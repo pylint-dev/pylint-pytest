@@ -11,7 +11,7 @@ with open(path.join(here, "README.md")) as fin:
 
 setup(
     name="pylint-pytest",
-    version="1.1.3rc0",
+    version="1.1.3rc1",
     author="Stavros Ntentos",
     author_email="133706+stdedos@users.noreply.github.com",
     license="MIT",
@@ -26,7 +26,7 @@ setup(
     description="A Pylint plugin to suppress pytest-related false positives.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages=find_packages(exclude=["tests", "sandbox"]),
+    packages=find_packages(exclude=["tests*", "sandbox"]),
     install_requires=[
         "pylint<3",
         "pytest>=4.6",
