@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 import fnmatch
 import io
 import sys
 from pathlib import Path
-from typing import Set, Tuple
 
 import astroid
 import pytest
@@ -19,7 +20,7 @@ from . import BasePytestChecker
 from .types import FixtureDict, replacement_add_message
 
 # TODO: support pytest python_files configuration
-FILE_NAME_PATTERNS: Tuple[str, ...] = ("test_*.py", "*_test.py")
+FILE_NAME_PATTERNS: tuple[str, ...] = ("test_*.py", "*_test.py")
 ARGUMENT_ARE_KEYWORD_ONLY = (
     "https://docs.pytest.org/en/stable/deprecations.html#pytest-fixture-arguments-are-keyword-only"
 )
@@ -28,7 +29,7 @@ ARGUMENT_ARE_KEYWORD_ONLY = (
 class FixtureCollector:
     # Same as ``_pytest.fixtures.FixtureManager._arg2fixturedefs``.
     fixtures: FixtureDict = {}
-    errors: Set[pytest.CollectReport] = set()
+    errors: set[pytest.CollectReport] = set()
 
     def pytest_sessionfinish(self, session):
         # pylint: disable=protected-access
@@ -76,9 +77,9 @@ class FixtureChecker(BasePytestChecker):
     # Store all fixtures discovered by pytest session
     _pytest_fixtures: FixtureDict = {}
     # Stores all used function arguments
-    _invoked_with_func_args: Set[str] = set()
+    _invoked_with_func_args: set[str] = set()
     # Stores all invoked fixtures through @pytest.mark.usefixture(...)
-    _invoked_with_usefixtures: Set[str] = set()
+    _invoked_with_usefixtures: set[str] = set()
     _original_add_message = replacement_add_message
 
     def open(self):
