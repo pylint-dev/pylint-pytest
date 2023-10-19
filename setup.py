@@ -11,11 +11,18 @@ with open(path.join(here, "README.md")) as fin:
 
 setup(
     name="pylint-pytest",
-    version="1.1.3a0",
+    version="1.1.3rc0",
     author="Stavros Ntentos",
     author_email="133706+stdedos@users.noreply.github.com",
     license="MIT",
-    url="https://github.com/reverbc/pylint-pytest",
+    url="https://github.com/pylint-dev/pylint-pytest",
+    project_urls={
+        "Changelog": "https://github.com/pylint-dev/pylint-pytest/blob/master/CHANGELOG.md",
+        "Documentation": "https://github.com/pylint-dev/pylint-pytest#readme",
+        "Say Thanks!": "https://saythanks.io/to/stdedos",
+        "Source": "https://github.com/pylint-dev/pylint-pytest",
+        "Tracker": "https://github.com/pylint-dev/pylint-pytest/issues",
+    },
     description="A Pylint plugin to suppress pytest-related false positives.",
     long_description=long_description,
     long_description_content_type="text/markdown",
