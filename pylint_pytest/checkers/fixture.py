@@ -196,7 +196,7 @@ class FixtureChecker(BasePytestChecker):
             for arg in node.args.args:
                 self._invoked_with_func_args.add(arg.name)
 
-    # pylint: disable=protected-access,bad-staticmethod-argument
+    # pylint: disable=bad-staticmethod-argument,too-many-branches # The function itself is an if-return logic.
     @staticmethod
     def patch_add_message(self, msgid, line=None, node=None, args=None,
                           confidence=None, col_offset=None):
@@ -238,16 +238,22 @@ class FixtureChecker(BasePytestChecker):
                     return
 
         # check W0613 unused-argument
-        if msgid == 'unused-argument':
-            if _can_use_fixture(node.parent.parent):
-                if isinstance(node.parent, astroid.Arguments):
-                    if node.name in FixtureChecker._pytest_fixtures:
-                        return  # argument is used as a fixture
-                    else:
-                        fixnames = (arg.name for arg in node.parent.args if arg.name in FixtureChecker._pytest_fixtures)
-                        for fixname in fixnames:
-                            if node.name in FixtureChecker._pytest_fixtures[fixname][0].argnames:
-                                return  # argument is used by a fixture
+        if (
+            msgid == "unused-argument"
+            and _can_use_fixture(node.parent.parent)
+            and isinstance(node.parent, astroid.Arguments)
+        ):
+            if node.name in FixtureChecker._pytest_fixtures:
+                # argument is used as a fixture
+                return
+
+            fixnames = (
+                arg.name for arg in node.parent.args if arg.name in FixtureChecker._pytest_fixtures
+            )
+            for fixname in fixnames:
+                if node.name in FixtureChecker._pytest_fixtures[fixname][0].argnames:
+                    # argument is used by a fixture
+                    return
 
         # check W0621 redefined-outer-name
         if msgid == 'redefined-outer-name' and \
