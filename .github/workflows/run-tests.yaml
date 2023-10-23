@@ -42,7 +42,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Slugify GITHUB_REPOSITORY
+      - name: Slugify GITHUB_REPOSITORY (win)
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          $slug = $env:GITHUB_REPOSITORY -replace '/', '_'
+          echo "GITHUB_REPOSITORY_SLUG=$slug" | tee -Append $env:GITHUB_ENV
+
+      - name: Slugify GITHUB_REPOSITORY (non-win)
+        if: ${{ matrix.os != 'windows-latest' }}
         run: echo "GITHUB_REPOSITORY_SLUG=${GITHUB_REPOSITORY////_}" >> $GITHUB_ENV
 
       - name: Set up Python ${{ matrix.python-version }}
