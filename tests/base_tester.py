@@ -1,59 +1,68 @@
-import sys
 import os
+import sys
+from abc import ABC
 from pprint import pprint
+from typing import Any, Dict, List
 
 import astroid
-from pylint.testutils import UnittestLinter
+from pylint.testutils import MessageTest, UnittestLinter
+
 try:
     from pylint.utils import ASTWalker
 except ImportError:
     # for pylint 1.9
     from pylint.utils import PyLintASTWalker as ASTWalker
+
 from pylint.checkers import BaseChecker
 
 import pylint_pytest.checkers.fixture
 
-# XXX: allow all file name
-pylint_pytest.checkers.fixture.FILE_NAME_PATTERNS = ('*', )
+# XXX: allow all file names
+pylint_pytest.checkers.fixture.FILE_NAME_PATTERNS = ("*",)
 
 
-class BasePytestTester(object):
+class BasePytestTester(ABC):
     CHECKER_CLASS = BaseChecker
-    IMPACTED_CHECKER_CLASSES = []
-    MSG_ID = None
-    MESSAGES = None
-    CONFIG = {}
+    IMPACTED_CHECKER_CLASSES: List[BaseChecker] = []
+    MSG_ID: str
+    msgs: List[MessageTest] = []
+    CONFIG: Dict[str, Any] = {}
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        if not hasattr(cls, "MSG_ID") or not isinstance(cls.MSG_ID, str) or not cls.MSG_ID:
+            raise TypeError("Subclasses must define a non-empty MSG_ID of type str")
 
     enable_plugin = True
 
-    def run_linter(self, enable_plugin, file_path=None):
+    def run_linter(self, enable_plugin):
         self.enable_plugin = enable_plugin
 
-        # pylint: disable=protected-access
-        if file_path is None:
-            module = sys._getframe(1).f_code.co_name.replace('test_', '', 1)
-            file_path = os.path.join(
-                os.getcwd(), 'tests', 'input', self.MSG_ID, module + '.py')
+        # pylint: disable-next=protected-access
+        target_test_file = sys._getframe(1).f_code.co_name.replace("test_", "", 1)
+        file_path = os.path.join(
+            os.getcwd(), "tests", "input", self.MSG_ID, target_test_file + ".py"
+        )
 
         with open(file_path) as fin:
             content = fin.read()
-            module = astroid.parse(content, module_name=module)
+            module = astroid.parse(content, module_name=target_test_file)
             module.file = fin.name
 
         self.walk(module)  # run all checkers
-        self.MESSAGES = self.linter.release_messages()
+        self.msgs = self.linter.release_messages()
 
     def verify_messages(self, msg_count, msg_id=None):
         msg_id = msg_id or self.MSG_ID
 
         matched_count = 0
-        for message in self.MESSAGES:
+        for message in self.msgs:
             # only care about ID and count, not the content
             if message.msg_id == msg_id:
                 matched_count += 1
 
-        pprint(self.MESSAGES)
-        assert matched_count == msg_count, f'expecting {msg_count}, actual {matched_count}'
+        pprint(self.msgs)
+        assert matched_count == msg_count, f"expecting {msg_count}, actual {matched_count}"
 
     def setup_method(self):
         self.linter = UnittestLinter()

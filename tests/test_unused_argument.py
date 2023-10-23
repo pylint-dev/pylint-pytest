@@ -1,6 +1,7 @@
 import pytest
-from pylint.checkers.variables import VariablesChecker
 from base_tester import BasePytestTester
+from pylint.checkers.variables import VariablesChecker
+
 from pylint_pytest.checkers.fixture import FixtureChecker
 
 

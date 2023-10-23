@@ -6,6 +6,6 @@ def yield_fixture():
     yield
 
 
-@pytest.yield_fixture(scope='session')
+@pytest.yield_fixture(scope="session")
 def yield_fixture_session():
     yield

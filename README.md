@@ -1,8 +1,18 @@
 # pylint-pytest
 
-[![PyPI version fury.io](https://badge.fury.io/py/pylint-pytest.svg)](https://pypi.python.org/pypi/pylint-pytest/)
-[![Travis CI](https://travis-ci.org/reverbc/pylint-pytest.svg?branch=master)](https://travis-ci.org/reverbc/pylint-pytest)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/reverbc/pylint-pytest?branch=master&svg=true)](https://ci.appveyor.com/project/reverbc/pylint-pytest)
+![PyPI - Version](https://img.shields.io/pypi/v/pylint-pytest)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pylint-pytest)
+![PyPI - Downloads](https://img.shields.io/pypi/dd/pylint-pytest)
+![PyPI - License](https://img.shields.io/pypi/l/pylint-pytest)
+
+[![Github - Testing](https://github.com/pylint-dev/pylint-pytest/actions/workflows/run-tests.yaml/badge.svg)](https://github.com/pylint-dev/pylint-pytest/actions/workflows/run-tests.yaml)
+[![codecov](https://codecov.io/gh/pylint-dev/pylint-pytest/graph/badge.svg?token=NhZDLKmomd)](https://codecov.io/gh/pylint-dev/pylint-pytest)
+
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
+
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/stdedos)
 
 A Pylint plugin to suppress pytest-related false positives.
 
@@ -50,7 +60,10 @@ def test_something(conftest_fixture):  # <- Unused argument 'conftest_fixture'
 FP when an imported fixture is used in an applicable function, e.g.
 
 ```python
-from fixture_collections import imported_fixture  # <- Unused imported_fixture imported from fixture_collections
+from fixture_collections import (
+    imported_fixture,
+)  # <- Unused imported_fixture imported from fixture_collections
+
 
 def test_something(imported_fixture):
     ...
@@ -63,7 +76,10 @@ FP when an imported/declared fixture is used in an applicable function, e.g.
 ```python
 from fixture_collections import imported_fixture
 
-def test_something(imported_fixture):  # <- Redefining name 'imported_fixture' from outer scope (line 1)
+
+def test_something(
+    imported_fixture,
+):  # <- Redefining name 'imported_fixture' from outer scope (line 1)
     ...
 ```
 
@@ -74,15 +90,18 @@ FP when class attributes are defined in setup fixtures
 ```python
 import pytest
 
+
 class TestClass(object):
     @staticmethod
-    @pytest.fixture(scope='class', autouse=True)
+    @pytest.fixture(scope="class", autouse=True)
     def setup_class(request):
         cls = request.cls
         cls.defined_in_setup_class = True
 
     def test_foo(self):
-        assert self.defined_in_setup_class  # <- Instance of 'TestClass' has no 'defined_in_setup_class' member
+        assert (
+            self.defined_in_setup_class
+        )  # <- Instance of 'TestClass' has no 'defined_in_setup_class' member
 ```
 
 ## Raise new warning(s)
@@ -93,6 +112,7 @@ Raise when using deprecated `@pytest.yield_fixture` decorator ([ref](https://doc
 
 ```python
 import pytest
+
 
 @pytest.yield_fixture  # <- Using a deprecated @pytest.yield_fixture decorator
 def yield_fixture():
@@ -106,12 +126,16 @@ Raise when using every `@pytest.mark.*` for the fixture ([ref](https://docs.pyte
 ```python
 import pytest
 
+
 @pytest.fixture
 def awesome_fixture():
     ...
 
+
 @pytest.fixture
-@pytest.mark.usefixtures("awesome_fixture")  # <- Using useless `@pytest.mark.*` decorator for fixtures
+@pytest.mark.usefixtures(
+    "awesome_fixture"
+)  # <- Using useless `@pytest.mark.*` decorator for fixtures
 def another_awesome_fixture():
     ...
 ```
@@ -122,6 +146,7 @@ Raise when using deprecated positional arguments for fixture decorator ([ref](ht
 
 ```python
 import pytest
+
 
 @pytest.fixture("module")  # <- Using a deprecated positional arguments for fixture
 def awesome_fixture():

@@ -6,6 +6,6 @@ def conftest_fixture_attr():
     return True
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def conftest_fixture_func():
     return True

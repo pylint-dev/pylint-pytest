@@ -2,6 +2,34 @@
 
 ## [Unreleased]
 
+## [1.1.3] - 2023-10-23
+
+This is the first release after maintenance was assumed by https://github.com/stdedos.
+
+The focus of this release was to improve automation:
+* Fix the continuous integration,
+* Run tests as part of branches and PRs,
+* Use `.pre-commit-config.yaml` file to upkeep the code quality, and
+* Automate the release process
+
+There should be no functional changes in this release, although there are changes in the source code.
+
+A heartfelt thank you to https://github.com/Pierre-Sassoulas for his invaluable contributions to the continued maintenance of this project!
+
+### Fixed
+
+- The continuous integration was fixed, as a new maintenance team was assembled.
+
+### Added
+
+- Added an extensive `.pre-commit-config.yaml` file to upkeep the code quality.
+  It includes, among others, `black`, `mypy` (in non-strict mode yet), `ruff`, and `pylint`.
+- Added an automated release process
+
+### Changed
+
+- Redirected all repository URLs to the https://github.com/pylint-dev/pylint-pytest.
+
 ## [1.1.2] - 2021-04-19
 ### Fixed
 - Fix #18 plugin crash when test case is marked with a non-pytest.mark decorator
