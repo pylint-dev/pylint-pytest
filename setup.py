@@ -11,7 +11,7 @@ with open(path.join(here, "README.md")) as fin:
 
 setup(
     name="pylint-pytest",
-    version="1.1.3rc1",
+    version="1.1.3",
     author="Stavros Ntentos",
     author_email="133706+stdedos@users.noreply.github.com",
     license="MIT",
