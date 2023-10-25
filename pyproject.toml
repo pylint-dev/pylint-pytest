@@ -36,7 +36,7 @@ paths.source = [
 ]
 
 [tool.mypy]
-python_version = "3.7"
+python_version = "3.12"
 check_untyped_defs = true
 explicit_package_bases = true
 namespace_packages = true
@@ -89,8 +89,7 @@ ignore = [
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
 ]
 
-# py36, but ruff does not support it :/
-target-version = "py37"
+target-version = "py312"
 
 [tool.ruff.pydocstyle]
 convention = "google"
@@ -113,7 +112,7 @@ convention = "google"
 
 [tool.pylint]
 
-py-version = "3.6"
+py-version = "3.12"
 
 ignore-paths="tests/input" # Ignore test inputs
 

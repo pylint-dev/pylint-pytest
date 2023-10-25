@@ -8,7 +8,6 @@ import astroid
 import pylint
 import pytest
 from pylint.checkers.variables import VariablesChecker
-from pylint.interfaces import IAstroidChecker
 
 from ..utils import (
     _can_use_fixture,
@@ -42,7 +41,6 @@ class FixtureCollector:
 
 
 class FixtureChecker(BasePytestChecker):
-    __implements__ = IAstroidChecker
     msgs = {
         "W6401": (
             "Using a deprecated @pytest.yield_fixture decorator",
