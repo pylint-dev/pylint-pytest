@@ -17,7 +17,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          # - windows-latest # TODO: Test on Windows
+          - windows-latest
           - macos-latest
         python-version:
           - '3.8'
@@ -55,6 +55,7 @@ jobs:
         run: |
           TOX_ENV=$(echo "py${{ matrix.python-version }}" | tr -d .)
           tox -e $TOX_ENV
+        shell: bash
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
