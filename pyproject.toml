@@ -36,7 +36,7 @@ paths.source = [
 ]
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.8"
 check_untyped_defs = true
 explicit_package_bases = true
 namespace_packages = true
@@ -89,7 +89,7 @@ ignore = [
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
 ]
 
-target-version = "py312"
+target-version = "py38"
 
 [tool.ruff.pydocstyle]
 convention = "google"
@@ -112,7 +112,7 @@ convention = "google"
 
 [tool.pylint]
 
-py-version = "3.12"
+py-version = "3.8"
 
 ignore-paths="tests/input" # Ignore test inputs
 
