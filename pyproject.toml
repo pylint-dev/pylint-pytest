@@ -1,4 +1,6 @@
 # Only a configuration storage, for now
+[tool.aliases]
+test = "pytest"
 
 [tool.black]
 line-length = 100
