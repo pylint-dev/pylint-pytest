@@ -70,13 +70,11 @@ class BasePytestTester(ABC):
         self.impacted_checkers = []
 
         for key, value in self.CONFIG.items():
-            setattr(self.checker.config, key, value)
+            setattr(self.linter.config, key, value)
         self.checker.open()
 
         for checker_class in self.IMPACTED_CHECKER_CLASSES:
             checker = checker_class(self.linter)
-            for key, value in self.CONFIG.items():
-                setattr(checker.config, key, value)
             checker.open()
             self.impacted_checkers.append(checker)
 

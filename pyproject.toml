@@ -124,13 +124,11 @@ load-plugins= [
     "pylint.extensions.broad_try_clause",
     "pylint.extensions.check_elif",
     "pylint.extensions.code_style",
-    "pylint.extensions.comparetozero",
     "pylint.extensions.comparison_placement",
     "pylint.extensions.confusing_elif",
     # "pylint.extensions.consider_ternary_expression", # Not a pretty refactoring
     "pylint.extensions.docparams",
     "pylint.extensions.docstyle",
-    "pylint.extensions.emptystring",
     "pylint.extensions.eq_without_hash",
     "pylint.extensions.for_any_all",
     "pylint.extensions.mccabe",

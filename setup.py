@@ -28,7 +28,7 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=["tests*", "sandbox"]),
     install_requires=[
-        "pylint<3",
+        "pylint<4",
         "pytest>=4.6",
     ],
     python_requires=">=3.8",
@@ -43,6 +43,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: Implementation :: CPython",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: MIT License",
