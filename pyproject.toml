@@ -5,6 +5,9 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 license-files = ["LICENSE"]
 
+[tool.setuptools.packages.find]
+exclude=["tests*", "sandbox"]
+
 [project]
 name = "pylint-pytest"
 version = "1.1.3"
