@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support for Python 3.12 (#24)
+- Support for Pylint 3 (#24)
+
 ### Removed
 
 * Support for Python 3.6 & 3.7 (https://github.com/pylint-dev/pylint-pytest/pull/23)

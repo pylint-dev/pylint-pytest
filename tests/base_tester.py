@@ -70,7 +70,8 @@ class BasePytestTester(ABC):
         self.linter = UnittestLinter()
         self.checker = self.CHECKER_CLASS(self.linter)
         self.impacted_checkers = []
-
+        for key, value in self.CONFIG.items():
+            setattr(self.linter.config, key, value)
         self.checker.open()
 
         for checker_class in self.IMPACTED_CHECKER_CLASSES:

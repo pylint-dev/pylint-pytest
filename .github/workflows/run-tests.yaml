@@ -24,7 +24,8 @@ jobs:
           - '3.9'
           - '3.10'
           - '3.11'
-#          - '3.12'  # FixMe: https://github.com/pylint-dev/pylint-pytest/issues/3
+          - '3.12'  # FixMe: https://github.com/pylint-dev/pylint-pytest/issues/3
+
 
     defaults:
       run:
