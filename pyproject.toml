@@ -43,6 +43,12 @@ dependencies = [
     "pytest>=4.6"
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+
 [project.urls]
 "Changelog"="https://github.com/pylint-dev/pylint-pytest/blob/master/CHANGELOG.md"
 "Documentation"="https://github.com/pylint-dev/pylint-pytest#readme"
