@@ -1,3 +1,4 @@
+---
 ci:
   skip: [pylint]
 
@@ -9,14 +10,37 @@ repos:
         exclude: ^.idea/
       - id: trailing-whitespace
       - id: pretty-format-json
-        args: [ "--no-sort-keys", "--autofix", "--indent=4" ]
         exclude: ^.vscode/
+        args:
+          - --autofix
+          - --no-sort-keys
+          - --indent=4
+      - id: check-yaml
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-shebang-scripts-are-executable
+      - id: name-tests-test
+        exclude: ^tests/(input/|base_tester(|_test).py$)
+        args:
+          - --pytest-test-first
+  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+    rev: 0.2.1
+    hooks:
+      - id: yamlfmt
+        args:
+          - --mapping
+          - '2'
+          - --sequence
+          - '4'
+          - --offset
+          - '2'
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.0.292
     hooks:
       - id: ruff
-        args: ["--fix"]
-        exclude: "tests/input/"
+        args:
+          - --fix
+        exclude: tests/input/
   - repo: https://github.com/psf/black
     rev: 23.9.1
     hooks:
@@ -41,16 +65,26 @@ repos:
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
+  - repo: local
+    hooks:
+      - id: python-no-log-fatal
+        name: avoid logger.fatal(
+        description: A quick check for the deprecated `.fatal()` method of python loggers
+        entry: (?<!warnings)\.fatal\(
+        language: pygrep
+        types: [python]
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.6.0
     hooks:
-       - id: mypy
-         exclude: "tests/input/"
+      - id: mypy
+        exclude: tests/input/
   - repo: local
     hooks:
       - id: pylint
         name: pylint
         entry: bash -c 'test -d .venv && . .venv/bin/activate ; pylint "$@"' -
         language: system
-        types: [ python ]
-        args: ["-sn", "-rn"]
+        types: [python]
+        args:
+          - -sn
+          - -rn
