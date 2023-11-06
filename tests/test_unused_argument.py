@@ -33,4 +33,4 @@ class TestUnusedArgument(BasePytestTester):
     @pytest.mark.parametrize("enable_plugin", [True, False])
     def test_func_param_as_fixture_arg(self, enable_plugin):
         self.run_linter(enable_plugin)
-        self.verify_messages(1 if enable_plugin else 2)
+        self.verify_messages(2 if enable_plugin else 3)

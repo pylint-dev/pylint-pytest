@@ -23,3 +23,9 @@ def test_myfix(myfix, arg):
 def test_nyfix(narg):  # unused-argument
     """A test function that does not use its param"""
     assert True
+
+
+@pytest.mark.parametrize("arg", [1, 2, 3])
+def test_narg_is_used_nowhere(myfix, narg):
+    """A test function that uses the param through a fixture"""
+    assert myfix
