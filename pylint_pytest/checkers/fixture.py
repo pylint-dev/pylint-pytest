@@ -116,10 +116,10 @@ class FixtureChecker(BasePytestChecker):
                 is_test_module = True
                 break
 
+        stdout, stderr = sys.stdout, sys.stderr
         try:
             with open(os.devnull, "w") as devnull:
                 # suppress any future output from pytest
-                stdout, stderr = sys.stdout, sys.stderr
                 sys.stderr = sys.stdout = devnull
 
                 # run pytest session with customized plugin to collect fixtures
@@ -210,7 +210,7 @@ class FixtureChecker(BasePytestChecker):
             for arg in node.args.args:
                 self._invoked_with_func_args.add(arg.name)
 
-    # pylint: disable=bad-staticmethod-argument
+    # pylint: disable=bad-staticmethod-argument,too-many-branches # The function itself is an if-return logic.
     @staticmethod
     def patch_add_message(
         self, msgid, line=None, node=None, args=None, confidence=None, col_offset=None
@@ -267,9 +267,18 @@ class FixtureChecker(BasePytestChecker):
             msgid == "unused-argument"
             and _can_use_fixture(node.parent.parent)
             and isinstance(node.parent, astroid.Arguments)
-            and node.name in FixtureChecker._pytest_fixtures
         ):
-            return
+            if node.name in FixtureChecker._pytest_fixtures:
+                # argument is used as a fixture
+                return
+
+            fixnames = (
+                arg.name for arg in node.parent.args if arg.name in FixtureChecker._pytest_fixtures
+            )
+            for fixname in fixnames:
+                if node.name in FixtureChecker._pytest_fixtures[fixname][0].argnames:
+                    # argument is used by a fixture
+                    return
 
         # check W0621 redefined-outer-name
         if (
