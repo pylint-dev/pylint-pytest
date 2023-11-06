@@ -2,6 +2,38 @@
 
 ## [Unreleased]
 
+## [1.1.4] - 2023-11-06
+
+This is a small bugfix release.
+
+### Fixed
+
+* `anis-campos/fix_is_pytest_fixture`: (https://github.com/pylint-dev/pylint-pytest/pull/2)
+  Astroid has different semantics when using `import pytest` or `from pytest import ...`,
+  which affects the detection of pytest fixtures.
+
+### Improved
+
+* `pre-commit`: (https://github.com/pylint-dev/pylint-pytest/pull/20)
+  * Added more checks to the `pre-commit` hook.
+    ```yaml
+    repos:
+      - repo: https://github.com/pre-commit/pre-commit-hooks
+        hooks:
+        - id: check-yaml
+        - id: check-toml
+        - id: check-vcs-permalinks
+        - id: check-shebang-scripts-are-executable
+        - id: name-tests-test
+      - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+          - id: yamlfmt
+      - repo: local
+        hooks:
+          - id: python-no-log-fatal
+            name: avoid logger.fatal(
+    ```
+  * Unified formatting (always expanded arrays; not covered by linters, sadly)
+
 ## [1.1.3] - 2023-10-23
 
 This is the first release after maintenance was assumed by https://github.com/stdedos.
