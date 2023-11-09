@@ -1,3 +1,4 @@
+---
 name: Testing
 
 on:
@@ -39,40 +40,41 @@ jobs:
         shell: ${{ matrix.os == 'windows-latest' && 'pwsh' || '/bin/bash --noprofile --norc -Eeuxo pipefail {0}' }}
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Slugify GITHUB_REPOSITORY
-      run: echo "GITHUB_REPOSITORY_SLUG=${GITHUB_REPOSITORY////_}" >> $GITHUB_ENV
+      - name: Slugify GITHUB_REPOSITORY
+        run: echo "GITHUB_REPOSITORY_SLUG=${GITHUB_REPOSITORY////_}" >> $GITHUB_ENV
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: 'pip'
-        cache-dependency-path: setup.py
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: setup.py
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install tox
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install tox
 
-    - name: Test with tox
-      env:
-        FORCE_COLOR: 1
-        PYTEST_CI_ARGS: --cov-report=xml --cov-report=html --junitxml=test_artifacts/test_report.xml --color=yes
-      run: tox ${{ matrix.python-version == '3.6' && '--skip-missing-interpreters=true' || '' }}
+      - name: Test with tox
+        env:
+          FORCE_COLOR: 1
+          PYTEST_CI_ARGS: --cov-report=xml --cov-report=html --junitxml=test_artifacts/test_report.xml --color=yes
+        run: tox ${{ matrix.python-version == '3.6' && '--skip-missing-interpreters=true' || '' }}
 
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        flags: ${{ matrix.os }},${{ matrix.python-version }}
-        fail_ci_if_error: true
-        files: test_artifacts/cobertura.xml
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: ${{ matrix.os }},${{ matrix.python-version }}
+          fail_ci_if_error: true
+          files: test_artifacts/cobertura.xml
 
-    - name: Create artifacts
-      uses: actions/upload-artifact@v3
-      if: ${{ !cancelled() }}
-      with:
-        name: ${{ env.GITHUB_REPOSITORY_SLUG }}_test-artifacts_${{ github.event_name }}_${{ github.event.pull_request.number || github.sha }}_${{ matrix.os }}_py${{ matrix.python-version }}
-        path: test_artifacts/
+      - name: Create artifacts
+        uses: actions/upload-artifact@v3
+        if: ${{ !cancelled() }}
+        with:
+          name: ${{ env.GITHUB_REPOSITORY_SLUG }}_test-artifacts_${{ github.event_name }}_${{ github.event.pull_request.number || github.sha }}_${{ matrix.os
+            }}_py${{ matrix.python-version }}
+          path: test_artifacts/
