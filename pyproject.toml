@@ -68,7 +68,7 @@ module = [
 check_untyped_defs = true
 
 [tool.pytest.ini_options]
-addopts = "--verbose --cov-config=pyproject.toml"
+addopts = "--verbose --cov-config=pyproject.toml --cov-report=html"
 
 [tool.ruff]
 # ruff is less lenient than pylint and does not make any exceptions

@@ -1,6 +1,7 @@
 import os
 import sys
 from abc import ABC
+from pathlib import Path
 from pprint import pprint
 from typing import Any, Dict, List
 
@@ -19,6 +20,11 @@ import pylint_pytest.checkers.fixture
 
 # XXX: allow all file names
 pylint_pytest.checkers.fixture.FILE_NAME_PATTERNS = ("*",)
+
+
+def get_test_root_path() -> Path:
+    """Assumes ``base_tester.py`` is at ``<root>/tests``."""
+    return Path(__file__).parent
 
 
 class BasePytestTester(ABC):
@@ -41,7 +47,10 @@ class BasePytestTester(ABC):
         # pylint: disable-next=protected-access
         target_test_file = sys._getframe(1).f_code.co_name.replace("test_", "", 1)
         file_path = os.path.join(
-            os.getcwd(), "tests", "input", self.MSG_ID, target_test_file + ".py"
+            get_test_root_path(),
+            "input",
+            self.MSG_ID,
+            target_test_file + ".py",
         )
 
         with open(file_path) as fin:
