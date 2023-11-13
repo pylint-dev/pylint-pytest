@@ -12,14 +12,21 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Package versions
-- pylint
-- pytest
-- pylint-pytest
+
+<!-- e.g., get them by running
+pip list |& grep -E '\b(pylint|pytest|pylint-pytest)\b' | sed 's/^/* /'
+-->
+
+* pylint:
+* pytest:
+* pylint-pytest:
 
 (add any relevant pylint/pytest plugin here)
 
 Folder structure
-```
+```console
+$ tree -L 2
+
 ```
 
 File content
@@ -32,7 +39,7 @@ pylint output with the plugin
 
 (Optional) pytest output from fixture collection
 ```bash
-$ pytest <path/to/test/module.py> --fixtures --collect-only
+$ pytest --fixtures --collect-only <path/to/test/module.py>
 <paste output here, can omit the built-ins>
 ```
 
