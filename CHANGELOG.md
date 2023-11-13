@@ -2,13 +2,23 @@
 
 ## [Unreleased]
 
+## [1.1.5] - 2023-11-13
+
+This is a small bugfix release.
+
+### Fixed
+
+* removes more false positives for unused-argument (https://github.com/pylint-dev/pylint-pytest/pull/21)
+* A collection of minor improvements to tests (https://github.com/pylint-dev/pylint-pytest/pull/26)
+* Windows Artifacts have incorrect Slugification (https://github.com/pylint-dev/pylint-pytest/pull/25)
+
 ## [1.1.4] - 2023-11-06
 
 This is a small bugfix release.
 
 ### Fixed
 
-* `anis-campos/fix_is_pytest_fixture`: (https://github.com/pylint-dev/pylint-pytest/pull/2)
+* `anis-campos/fix_is_pytest_fixture` (https://github.com/pylint-dev/pylint-pytest/pull/2)
   Astroid has different semantics when using `import pytest` or `from pytest import ...`,
   which affects the detection of pytest fixtures.
 
