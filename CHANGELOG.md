@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [1.1.6] - 2023-11-20
+
+This is a small bugfix release.
+
+This will probably be the last bugfix release in the v1 series.
+We MAY support Python 3.12 in the v1 series if support appears to be trivial.
+
+### Fixed
+
+* 🐛 Ignore collection failures in non-tests (https://github.com/pylint-dev/pylint-pytest/pull/15)
+* Minor `.github/ISSUE_TEMPLATE/bug_report.md` improvement (https://github.com/pylint-dev/pylint-pytest/commit/22650f9912bcdc6a1bc4b3166f70bba7339aba7c)
+
 ## [1.1.5] - 2023-11-13
 
 This is a small bugfix release.
