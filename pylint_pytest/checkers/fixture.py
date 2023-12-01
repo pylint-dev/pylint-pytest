@@ -232,7 +232,7 @@ class FixtureChecker(BasePytestChecker):
             for arg in node.args.args:
                 self._invoked_with_func_args.add(arg.name)
 
-    # pylint: disable=bad-staticmethod-argument,too-many-branches # The function itself is an if-return logic.
+    # pylint: disable=bad-staticmethod-argument # The function itself is an if-return logic.
     @staticmethod
     def patch_add_message(
         self, msgid, line=None, node=None, args=None, confidence=None, col_offset=None

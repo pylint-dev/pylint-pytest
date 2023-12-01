@@ -123,13 +123,11 @@ load-plugins= [
     "pylint.extensions.broad_try_clause",
     "pylint.extensions.check_elif",
     "pylint.extensions.code_style",
-    "pylint.extensions.comparetozero",
     "pylint.extensions.comparison_placement",
     "pylint.extensions.confusing_elif",
     # "pylint.extensions.consider_ternary_expression", # Not a pretty refactoring
     "pylint.extensions.docparams",
     "pylint.extensions.docstyle",
-    "pylint.extensions.emptystring",
     "pylint.extensions.eq_without_hash",
     "pylint.extensions.for_any_all",
     "pylint.extensions.mccabe",
@@ -174,4 +172,8 @@ output-format = "colorized"
 ignored-argument-names = "_.*"
 
 [tool.pylint."messages control"]
-enable = ["useless-suppression"]
+enable = [
+    "useless-suppression",
+    "use-implicit-booleaness-not-comparison-to-zero",
+    "use-implicit-booleaness-not-comparison-to-string",
+]

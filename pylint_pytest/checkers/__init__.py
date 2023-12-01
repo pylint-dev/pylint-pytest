@@ -8,7 +8,8 @@ class BasePytestChecker(BaseChecker):
         # todo(maybe-remove): if we only support pylint>=3
         # Since https://github.com/pylint-dev/pylint/pull/8404, pylint does not need this
         # __implements__ pattern. keeping it for retro compatibility with pylint==2.x
-        from pylint.interfaces import IAstroidChecker  # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel,no-name-in-module
+        from pylint.interfaces import IAstroidChecker
 
         __implements__ = IAstroidChecker
 
