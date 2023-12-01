@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Set, Tuple
 
 import astroid
-import pylint
 import pytest
 from pylint.checkers.variables import VariablesChecker
 
@@ -312,10 +311,4 @@ class FixtureChecker(BasePytestChecker):
         ):
             return
 
-        if int(pylint.__version__.split(".")[0]) >= 2:
-            FixtureChecker._original_add_message(
-                self, msgid, line, node, args, confidence, col_offset
-            )
-        else:
-            # python2 + pylint1.9 backward compatibility
-            FixtureChecker._original_add_message(self, msgid, line, node, args, confidence)
+        FixtureChecker._original_add_message(self, msgid, line, node, args, confidence, col_offset)

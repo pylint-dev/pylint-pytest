@@ -6,15 +6,9 @@ from pprint import pprint
 from typing import Any, Dict, List
 
 import astroid
-from pylint.testutils import MessageTest, UnittestLinter
-
-try:
-    from pylint.utils import ASTWalker
-except ImportError:
-    # for pylint 1.9
-    from pylint.utils import PyLintASTWalker as ASTWalker
-
 from pylint.checkers import BaseChecker
+from pylint.testutils import MessageTest, UnittestLinter
+from pylint.utils import ASTWalker
 
 import pylint_pytest.checkers.fixture
 
