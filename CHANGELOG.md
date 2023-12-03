@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [1.1.7] - 2023-12-03
+
+This is a small release to support additionally Pylint v3.
+It should be noted, however, that for linting, Pylint must be v3 or newer (due to backwards-incompatible changes).
+
+### Fixed
+
+* Support pylint v3 and drop v1 (https://github.com/pylint-dev/pylint-pytest/pull/27)
+
 ## [1.1.6] - 2023-11-20
 
 This is a small bugfix release.
