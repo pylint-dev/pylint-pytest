@@ -28,7 +28,7 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=["tests*", "sandbox"]),
     install_requires=[
-        "pylint<3",
+        "pylint>=2",
         "pytest>=4.6",
     ],
     python_requires=">=3.6",

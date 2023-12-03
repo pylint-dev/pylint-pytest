@@ -1,6 +1,9 @@
 import inspect
 
 import astroid
+import pylint
+
+PYLINT_VERSION_MAJOR = int(pylint.__version__.split(".")[0])
 
 
 def _is_pytest_mark_usefixtures(decorator):
