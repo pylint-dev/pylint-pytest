@@ -1,19 +1,14 @@
 import os
 import sys
 from abc import ABC
+from pathlib import Path
 from pprint import pprint
-from typing import Any, Dict, List
+from typing import List, Type
 
 import astroid
-from pylint.testutils import MessageTest, UnittestLinter
-
-try:
-    from pylint.utils import ASTWalker
-except ImportError:
-    # for pylint 1.9
-    from pylint.utils import PyLintASTWalker as ASTWalker
-
 from pylint.checkers import BaseChecker
+from pylint.testutils import MessageTest, UnittestLinter
+from pylint.utils import ASTWalker
 
 import pylint_pytest.checkers.fixture
 
@@ -21,12 +16,16 @@ import pylint_pytest.checkers.fixture
 pylint_pytest.checkers.fixture.FILE_NAME_PATTERNS = ("*",)
 
 
+def get_test_root_path() -> Path:
+    """Assumes ``base_tester.py`` is at ``<root>/tests``."""
+    return Path(__file__).parent
+
+
 class BasePytestTester(ABC):
     CHECKER_CLASS = BaseChecker
-    IMPACTED_CHECKER_CLASSES: List[BaseChecker] = []
+    IMPACTED_CHECKER_CLASSES: List[Type[BaseChecker]] = []
     MSG_ID: str
     msgs: List[MessageTest] = []
-    CONFIG: Dict[str, Any] = {}
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -41,7 +40,10 @@ class BasePytestTester(ABC):
         # pylint: disable-next=protected-access
         target_test_file = sys._getframe(1).f_code.co_name.replace("test_", "", 1)
         file_path = os.path.join(
-            os.getcwd(), "tests", "input", self.MSG_ID, target_test_file + ".py"
+            get_test_root_path(),
+            "input",
+            self.MSG_ID,
+            target_test_file + ".py",
         )
 
         with open(file_path) as fin:
@@ -69,8 +71,6 @@ class BasePytestTester(ABC):
         self.checker = self.CHECKER_CLASS(self.linter)
         self.impacted_checkers = []
 
-        for key, value in self.CONFIG.items():
-            setattr(self.linter.config, key, value)
         self.checker.open()
 
         for checker_class in self.IMPACTED_CHECKER_CLASSES:

@@ -33,7 +33,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Slugify GITHUB_REPOSITORY
+      - name: Slugify GITHUB_REPOSITORY (win)
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          $slug = $env:GITHUB_REPOSITORY -replace '/', '_'
+          echo "GITHUB_REPOSITORY_SLUG=$slug" | tee -Append $env:GITHUB_ENV
+
+      - name: Slugify GITHUB_REPOSITORY (non-win)
+        if: ${{ matrix.os != 'windows-latest' }}
         run: echo "GITHUB_REPOSITORY_SLUG=${GITHUB_REPOSITORY////_}" >> $GITHUB_ENV
 
       - name: Set up Python ${{ matrix.python-version }}
@@ -51,11 +58,8 @@ jobs:
       - name: Test with tox
         env:
           FORCE_COLOR: 1
-          PYTEST_CI_ARGS: --cov-report=xml --cov-report=html --junitxml=test_artifacts/test_report.xml --color=yes
-        run: |
-          TOX_ENV=$(echo "py${{ matrix.python-version }}" | tr -d .)
-          tox -e $TOX_ENV
-        shell: bash
+          PYTEST_CI_ARGS: --cov-report=xml --junitxml=test_artifacts/test_report.xml --color=yes
+        run: tox --skip-missing-interpreters=true
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

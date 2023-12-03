@@ -4,12 +4,75 @@
 
 ### Added
 
-- Support for Python 3.12 (#24)
-- Support for Pylint 3 (#24)
+* Support for Python 3.12 (https://github.com/pylint-dev/pylint-pytest/pull/24)
+* Support for Pylint 3 (https://github.com/pylint-dev/pylint-pytest/pull/24)
 
 ### Removed
 
-- Support for Python 3.6 & 3.7 (#23)
+* Support for Python 3.6 & 3.7 (https://github.com/pylint-dev/pylint-pytest/pull/23)
+
+## [1.1.7] - 2023-12-04
+
+This is a small release to support additionally Pylint v3.
+It should be noted, however, that for linting, Pylint must be v3 or newer (due to backwards-incompatible changes).
+
+### Fixed
+
+* Support pylint v3 and drop v1 (https://github.com/pylint-dev/pylint-pytest/pull/27)
+
+## [1.1.6] - 2023-11-20
+
+This is a small bugfix release.
+
+This will probably be the last bugfix release in the v1 series.
+We MAY support Python 3.12 in the v1 series if support appears to be trivial.
+
+### Fixed
+
+* 🐛 Ignore collection failures in non-tests (https://github.com/pylint-dev/pylint-pytest/pull/15)
+* Minor `.github/ISSUE_TEMPLATE/bug_report.md` improvement (https://github.com/pylint-dev/pylint-pytest/commit/22650f9912bcdc6a1bc4b3166f70bba7339aba7c)
+
+## [1.1.5] - 2023-11-13
+
+This is a small bugfix release.
+
+### Fixed
+
+* removes more false positives for unused-argument (https://github.com/pylint-dev/pylint-pytest/pull/21)
+* A collection of minor improvements to tests (https://github.com/pylint-dev/pylint-pytest/pull/26)
+* Windows Artifacts have incorrect Slugification (https://github.com/pylint-dev/pylint-pytest/pull/25)
+
+## [1.1.4] - 2023-11-06
+
+This is a small bugfix release.
+
+### Fixed
+
+* `anis-campos/fix_is_pytest_fixture` (https://github.com/pylint-dev/pylint-pytest/pull/2)
+  Astroid has different semantics when using `import pytest` or `from pytest import ...`,
+  which affects the detection of pytest fixtures.
+
+### Improved
+
+* `pre-commit`: (https://github.com/pylint-dev/pylint-pytest/pull/20)
+  * Added more checks to the `pre-commit` hook.
+    ```yaml
+    repos:
+      - repo: https://github.com/pre-commit/pre-commit-hooks
+        hooks:
+        - id: check-yaml
+        - id: check-toml
+        - id: check-vcs-permalinks
+        - id: check-shebang-scripts-are-executable
+        - id: name-tests-test
+      - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+          - id: yamlfmt
+      - repo: local
+        hooks:
+          - id: python-no-log-fatal
+            name: avoid logger.fatal(
+    ```
+  * Unified formatting (always expanded arrays; not covered by linters, sadly)
 
 ## [1.1.3] - 2023-10-23
 

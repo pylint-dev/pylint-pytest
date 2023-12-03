@@ -1,11 +1,10 @@
 import fnmatch
-import os
+import io
 import sys
 from pathlib import Path
 from typing import Set, Tuple
 
 import astroid
-import pylint
 import pytest
 from pylint.checkers.variables import VariablesChecker
 
@@ -66,8 +65,8 @@ class FixtureChecker(BasePytestChecker):
         "F6401": (
             (
                 "pylint-pytest plugin cannot enumerate and collect pytest fixtures. "
-                "Please run `pytest --fixtures --collect-only path/to/current/module.py`"
-                " and resolve any potential syntax error or package dependency issues"
+                "Please run `pytest --fixtures --collect-only %s` and resolve "
+                "any potential syntax error or package dependency issues. stdout: %s. stderr: %s."
             ),
             "cannot-enumerate-pytest-fixtures",
             "Used when pylint-pytest has been unable to enumerate and collect pytest fixtures.",
@@ -114,11 +113,12 @@ class FixtureChecker(BasePytestChecker):
                 is_test_module = True
                 break
 
+        stdout, stderr = sys.stdout, sys.stderr
         try:
-            with open(os.devnull, "w") as devnull:
+            with io.StringIO() as captured_stdout, io.StringIO() as captured_stderr:
                 # suppress any future output from pytest
-                stdout, stderr = sys.stdout, sys.stderr
-                sys.stderr = sys.stdout = devnull
+                sys.stderr = captured_stderr
+                sys.stdout = captured_stdout
 
                 # run pytest session with customized plugin to collect fixtures
                 fixture_collector = FixtureCollector()
@@ -141,8 +141,32 @@ class FixtureChecker(BasePytestChecker):
 
                 FixtureChecker._pytest_fixtures = fixture_collector.fixtures
 
-                if (ret != pytest.ExitCode.OK or fixture_collector.errors) and is_test_module:
-                    self.add_message("cannot-enumerate-pytest-fixtures", node=node)
+                legitimate_failure_paths = set(
+                    collection_report.nodeid
+                    for collection_report in fixture_collector.errors
+                    if any(
+                        fnmatch.fnmatch(
+                            Path(collection_report.nodeid).name,
+                            pattern,
+                        )
+                        for pattern in FILE_NAME_PATTERNS
+                    )
+                )
+                if (ret != pytest.ExitCode.OK or legitimate_failure_paths) and is_test_module:
+                    files_to_report = {
+                        str(Path(x).absolute().relative_to(Path.cwd()))
+                        for x in legitimate_failure_paths | {node.file}
+                    }
+
+                    self.add_message(
+                        "cannot-enumerate-pytest-fixtures",
+                        args=(
+                            " ".join(files_to_report),
+                            captured_stdout.getvalue(),
+                            captured_stderr.getvalue(),
+                        ),
+                        node=node,
+                    )
         finally:
             # restore output devices
             sys.stdout, sys.stderr = stdout, stderr
@@ -208,7 +232,7 @@ class FixtureChecker(BasePytestChecker):
             for arg in node.args.args:
                 self._invoked_with_func_args.add(arg.name)
 
-    # pylint: disable=bad-staticmethod-argument
+    # pylint: disable=bad-staticmethod-argument # The function itself is an if-return logic.
     @staticmethod
     def patch_add_message(
         self, msgid, line=None, node=None, args=None, confidence=None, col_offset=None
@@ -265,9 +289,18 @@ class FixtureChecker(BasePytestChecker):
             msgid == "unused-argument"
             and _can_use_fixture(node.parent.parent)
             and isinstance(node.parent, astroid.Arguments)
-            and node.name in FixtureChecker._pytest_fixtures
         ):
-            return
+            if node.name in FixtureChecker._pytest_fixtures:
+                # argument is used as a fixture
+                return
+
+            fixnames = (
+                arg.name for arg in node.parent.args if arg.name in FixtureChecker._pytest_fixtures
+            )
+            for fixname in fixnames:
+                if node.name in FixtureChecker._pytest_fixtures[fixname][0].argnames:
+                    # argument is used by a fixture
+                    return
 
         # check W0621 redefined-outer-name
         if (
@@ -278,10 +311,4 @@ class FixtureChecker(BasePytestChecker):
         ):
             return
 
-        if int(pylint.__version__.split(".")[0]) >= 2:
-            FixtureChecker._original_add_message(
-                self, msgid, line, node, args, confidence, col_offset
-            )
-        else:
-            # python2 + pylint1.9 backward compatibility
-            FixtureChecker._original_add_message(self, msgid, line, node, args, confidence)
+        FixtureChecker._original_add_message(self, msgid, line, node, args, confidence, col_offset)
