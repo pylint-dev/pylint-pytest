@@ -3,18 +3,12 @@ import sys
 from abc import ABC
 from pathlib import Path
 from pprint import pprint
-from typing import Any, Dict, List
+from typing import List, Type
 
 import astroid
-from pylint.testutils import MessageTest, UnittestLinter
-
-try:
-    from pylint.utils import ASTWalker
-except ImportError:
-    # for pylint 1.9
-    from pylint.utils import PyLintASTWalker as ASTWalker
-
 from pylint.checkers import BaseChecker
+from pylint.testutils import MessageTest, UnittestLinter
+from pylint.utils import ASTWalker
 
 import pylint_pytest.checkers.fixture
 
@@ -29,10 +23,9 @@ def get_test_root_path() -> Path:
 
 class BasePytestTester(ABC):
     CHECKER_CLASS = BaseChecker
-    IMPACTED_CHECKER_CLASSES: List[BaseChecker] = []
+    IMPACTED_CHECKER_CLASSES: List[Type[BaseChecker]] = []
     MSG_ID: str
     msgs: List[MessageTest] = []
-    CONFIG: Dict[str, Any] = {}
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -78,14 +71,10 @@ class BasePytestTester(ABC):
         self.checker = self.CHECKER_CLASS(self.linter)
         self.impacted_checkers = []
 
-        for key, value in self.CONFIG.items():
-            setattr(self.checker.config, key, value)
         self.checker.open()
 
         for checker_class in self.IMPACTED_CHECKER_CLASSES:
             checker = checker_class(self.linter)
-            for key, value in self.CONFIG.items():
-                setattr(checker.config, key, value)
             checker.open()
             self.impacted_checkers.append(checker)
 

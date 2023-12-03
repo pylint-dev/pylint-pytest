@@ -5,10 +5,8 @@ from pathlib import Path
 from typing import Set, Tuple
 
 import astroid
-import pylint
 import pytest
 from pylint.checkers.variables import VariablesChecker
-from pylint.interfaces import IAstroidChecker
 
 from ..utils import (
     _can_use_fixture,
@@ -42,7 +40,6 @@ class FixtureCollector:
 
 
 class FixtureChecker(BasePytestChecker):
-    __implements__ = IAstroidChecker
     msgs = {
         "W6401": (
             "Using a deprecated @pytest.yield_fixture decorator",
@@ -235,7 +232,7 @@ class FixtureChecker(BasePytestChecker):
             for arg in node.args.args:
                 self._invoked_with_func_args.add(arg.name)
 
-    # pylint: disable=bad-staticmethod-argument,too-many-branches # The function itself is an if-return logic.
+    # pylint: disable=bad-staticmethod-argument # The function itself is an if-return logic.
     @staticmethod
     def patch_add_message(
         self, msgid, line=None, node=None, args=None, confidence=None, col_offset=None
@@ -314,10 +311,4 @@ class FixtureChecker(BasePytestChecker):
         ):
             return
 
-        if int(pylint.__version__.split(".")[0]) >= 2:
-            FixtureChecker._original_add_message(
-                self, msgid, line, node, args, confidence, col_offset
-            )
-        else:
-            # python2 + pylint1.9 backward compatibility
-            FixtureChecker._original_add_message(self, msgid, line, node, args, confidence)
+        FixtureChecker._original_add_message(self, msgid, line, node, args, confidence, col_offset)

@@ -1,14 +1,12 @@
 from typing import Optional, Set
 
 from astroid import Assign, Attribute, ClassDef, Name
-from pylint.interfaces import IAstroidChecker
 
 from ..utils import _can_use_fixture, _is_class_autouse_fixture
 from . import BasePytestChecker
 
 
 class ClassAttrLoader(BasePytestChecker):
-    __implements__ = IAstroidChecker
     msgs = {"E6400": ("", "pytest-class-attr-loader", "")}
 
     in_setup = False
