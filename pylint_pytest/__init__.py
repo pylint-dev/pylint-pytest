@@ -1,30 +1,21 @@
-import glob
-import importlib
-import inspect
-import os
+from pylint.checkers.variables import VariablesChecker
+from pylint.lint import PyLinter
 
-from .checkers import BasePytestChecker
+from .checkers.class_attr_loader import ClassAttrLoader
+from .checkers.fixture import FixtureChecker
+from .checkers.variables import CustomVariablesChecker
 
 
-def register(linter):
-    """auto discover pylint checker classes"""
-    dirname = os.path.dirname(__file__)
-    for module in glob.glob(os.path.join(dirname, "checkers", "*.py")):
-        # trim file extension
-        module = os.path.splitext(module)[0]
+def register(linter: PyLinter) -> None:
+    """Register the checker classes"""
+    remove_original_variables_checker(linter)
+    linter.register_checker(CustomVariablesChecker(linter))
+    linter.register_checker(FixtureChecker(linter))
+    linter.register_checker(ClassAttrLoader(linter))
 
-        # use relative path only
-        module = module.replace(dirname, "", 1)
 
-        # translate file path into module import path
-        module = module.replace(os.sep, ".")
-
-        checker = importlib.import_module(module, package=os.path.basename(dirname))
-        for attr_name in dir(checker):
-            attr_val = getattr(checker, attr_name)
-            if (
-                attr_val != BasePytestChecker
-                and inspect.isclass(attr_val)
-                and issubclass(attr_val, BasePytestChecker)
-            ):
-                linter.register_checker(attr_val(linter))
+def remove_original_variables_checker(linter: PyLinter) -> None:
+    """We need to remove VariablesChecker before registering CustomVariablesChecker"""
+    variable_checkers = linter._checkers[VariablesChecker.name]  # pylint: disable=protected-access
+    for checker in [x for x in variable_checkers if isinstance(x, VariablesChecker)]:
+        variable_checkers.remove(checker)

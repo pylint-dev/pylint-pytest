@@ -1,13 +1,13 @@
 import pytest
 from base_tester import BasePytestTester
-from pylint.checkers.variables import VariablesChecker
 
 from pylint_pytest.checkers.fixture import FixtureChecker
+from pylint_pytest.checkers.variables import CustomVariablesChecker
 
 
 class TestRedefinedOuterName(BasePytestTester):
     CHECKER_CLASS = FixtureChecker
-    IMPACTED_CHECKER_CLASSES = [VariablesChecker]
+    IMPACTED_CHECKER_CLASSES = [CustomVariablesChecker]
     MSG_ID = "redefined-outer-name"
 
     @pytest.mark.parametrize("enable_plugin", [True, False])
