@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import os
 import sys
 from abc import ABC
 from pathlib import Path
 from pprint import pprint
-from typing import List, Type
 
 import astroid
 from pylint.checkers import BaseChecker
@@ -23,9 +24,9 @@ def get_test_root_path() -> Path:
 
 class BasePytestTester(ABC):
     CHECKER_CLASS = BaseChecker
-    IMPACTED_CHECKER_CLASSES: List[Type[BaseChecker]] = []
+    IMPACTED_CHECKER_CLASSES: list[BaseChecker] = []
     MSG_ID: str
-    msgs: List[MessageTest] = []
+    msgs: list[MessageTest] = []
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)

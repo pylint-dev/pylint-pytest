@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sys
 from pprint import pprint
 from typing import Any, Dict, List

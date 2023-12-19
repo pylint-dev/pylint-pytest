@@ -1,4 +1,75 @@
-# Only a configuration storage, for now
+[build-system]
+requires = ["setuptools>=66.1"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pylint-pytest"
+version = "2.0.0rc0"
+license = {file = "LICENSE"}
+description = "A Pylint plugin to suppress pytest-related false positives."
+
+authors = [
+    {name = "Reverb Chu"},
+]
+maintainers = [
+    {name = "Stavros Ntentos", email = "133706+stdedos@users.noreply.github.com"},
+    {name = "Pierre Sassoulas", email = "pierre.sassoulas@gmail.com"},
+]
+
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Quality Assurance",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+]
+keywords = [
+    "pylint",
+    "pytest",
+    "plugin",
+]
+
+requires-python = ">=3.8"
+dependencies = [
+    "pylint>=2",
+    "pytest>=4.6",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    # For linting purposes, only pylint>3 is supported
+    "pylint>=3",
+]
+
+[project.urls]
+Changelog = "https://github.com/pylint-dev/pylint-pytest/blob/master/CHANGELOG.md"
+Documentation = "https://github.com/pylint-dev/pylint-pytest#readme"
+Homepage = "https://github.com/pylint-dev/pylint-pytest"
+Source = "https://github.com/pylint-dev/pylint-pytest"
+Tracker = "https://github.com/pylint-dev/pylint-pytest/issues"
+"Say Thanks!" = "https://saythanks.io/to/stdedos"
+
+[tool.setuptools]
+license-files = ["LICENSE"]
+
+[tool.setuptools.packages.find]
+exclude = [
+    "tests*",
+    "sandbox",
+]
+
 [tool.aliases]
 test = "pytest"
 
