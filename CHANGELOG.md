@@ -4,8 +4,9 @@
 
 ### Added
 
-* Support for Python 3.12 (https://github.com/pylint-dev/pylint-pytest/pull/24)
-* Support for Pylint 3 (https://github.com/pylint-dev/pylint-pytest/pull/24)
+* Migrate setup.py to pyproject.toml (https://github.com/pylint-dev/pylint-pytest/pull/8)
+* Support for Python 3.12 (https://github.com/pylint-dev/pylint-pytest/issues/3,
+  "side effect" of https://github.com/pylint-dev/pylint-pytest/pull/8)
 
 ### Removed
 
