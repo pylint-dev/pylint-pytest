@@ -19,6 +19,7 @@ requirements/dev.txt: .venv requirements/dev.in pyproject.toml
 		 requirements/dev.in pyproject.toml
 
 # upgrades the dependencies to their latest/matching version
+.PHONY: upgrade
 upgrade: .venv
 	pip-compile \
 		--quiet --generate-hashes --max-rounds=20 --strip-extras \
