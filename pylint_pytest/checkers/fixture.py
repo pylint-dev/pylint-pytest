@@ -105,9 +105,6 @@ class FixtureChecker(BasePytestChecker):
                 is_test_module = True
                 break
 
-        if not is_test_module:
-            return
-
         stdout, stderr = sys.stdout, sys.stderr
         try:
             with io.StringIO() as captured_stdout, io.StringIO() as captured_stderr:
@@ -149,7 +146,7 @@ class FixtureChecker(BasePytestChecker):
                 )
 
                 message = ""
-                if ret != pytest.ExitCode.OK:
+                if ret != pytest.ExitCode.OK and is_test_module:
                     parts = []
                     if stdout_text := captured_stdout.getvalue():
                         parts.append(f"stdout: {stdout_text}")
