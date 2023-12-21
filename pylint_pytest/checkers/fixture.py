@@ -3,6 +3,7 @@ from __future__ import annotations
 import fnmatch
 import io
 import sys
+import textwrap
 from pathlib import Path
 
 import astroid
@@ -65,7 +66,7 @@ class FixtureChecker(BasePytestChecker):
             (
                 "pylint-pytest plugin cannot enumerate and collect pytest fixtures. "
                 "Please run `pytest --fixtures --collect-only %s` and resolve "
-                "any potential syntax error or package dependency issues. stdout: %s. stderr: %s."
+                "any potential syntax error or package dependency issues. Details:\n%s"
             ),
             "cannot-enumerate-pytest-fixtures",
             "Used when pylint-pytest has been unable to enumerate and collect pytest fixtures.",
@@ -92,6 +93,8 @@ class FixtureChecker(BasePytestChecker):
         - invoke pytest session to collect available fixtures
         - create containers for the module to store args and fixtures
         """
+        # pylint: disable=too-many-locals
+
         FixtureChecker._pytest_fixtures = {}
         FixtureChecker._invoked_with_func_args = set()
         FixtureChecker._invoked_with_usefixtures = set()
@@ -101,6 +104,9 @@ class FixtureChecker(BasePytestChecker):
             if fnmatch.fnmatch(Path(node.file).name, pattern):
                 is_test_module = True
                 break
+
+        if not is_test_module:
+            return
 
         stdout, stderr = sys.stdout, sys.stderr
         try:
@@ -141,21 +147,41 @@ class FixtureChecker(BasePytestChecker):
                         for pattern in FILE_NAME_PATTERNS
                     )
                 )
-                if (ret != pytest.ExitCode.OK or legitimate_failure_paths) and is_test_module:
-                    files_to_report = {
-                        str(Path(x).absolute().relative_to(Path.cwd()))
-                        for x in legitimate_failure_paths | {node.file}
-                    }
 
-                    self.add_message(
-                        "cannot-enumerate-pytest-fixtures",
-                        args=(
-                            " ".join(files_to_report),
-                            captured_stdout.getvalue(),
-                            captured_stderr.getvalue(),
-                        ),
-                        node=node,
+                message = ""
+                if ret != pytest.ExitCode.OK:
+                    parts = []
+                    if stdout_text := captured_stdout.getvalue():
+                        parts.append(f"stdout: {stdout_text}")
+
+                    if stderr_text := captured_stderr.getvalue():
+                        parts.append(f"stderr: {stderr_text}")
+                    message = "\n".join(parts)
+
+                if legitimate_failure_paths:
+                    message += "* "
+                    message += "\n* ".join(
+                        f"{report.nodeid}:\n{textwrap.indent(report.longreprtext, '  ')}"
+                        for report in fixture_collector.errors
+                        if report.nodeid in legitimate_failure_paths
                     )
+
+                if not message:
+                    return
+
+                files_to_report = {
+                    str(Path(x).absolute().relative_to(Path.cwd()))
+                    for x in legitimate_failure_paths | {node.file}
+                }
+
+                self.add_message(
+                    "cannot-enumerate-pytest-fixtures",
+                    args=(
+                        " ".join(files_to_report),
+                        message,
+                    ),
+                    node=node,
+                )
         finally:
             # restore output devices
             sys.stdout, sys.stderr = stdout, stderr

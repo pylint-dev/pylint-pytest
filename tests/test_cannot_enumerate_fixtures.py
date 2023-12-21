@@ -26,10 +26,8 @@ class TestCannotEnumerateFixtures(BasePytestTester):
             # Asserts that path is relative (usually to the root of the repository).
             assert filename_arg[0] != "/"
 
-            # Assert `stdout` is non-empty.
+            # Assert details is non-empty.
             assert msg.args[1]
-            # Assert `stderr` is empty (pytest runs stably, even though fixture collection fails).
-            assert not msg.args[2]
 
     @pytest.mark.parametrize("enable_plugin", [True, False])
     def test_import_corrupted_module(self, enable_plugin):
@@ -47,7 +45,5 @@ class TestCannotEnumerateFixtures(BasePytestTester):
             # Asserts that paths are relative (usually to the root of the repository).
             assert not [x for x in filename_arg.split(" ") if x[0] == "/"]
 
-            # Assert `stdout` is non-empty.
+            # Assert details is non-empty.
             assert msg.args[1]
-            # Assert `stderr` is empty (pytest runs stably, even though fixture collection fails).
-            assert not msg.args[2]
