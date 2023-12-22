@@ -31,7 +31,7 @@ jobs:
         shell: ${{ matrix.os == 'windows-latest' && 'pwsh' || '/bin/bash --noprofile --norc -Eeuxo pipefail {0}' }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Slugify GITHUB_REPOSITORY (win)
         if: ${{ matrix.os == 'windows-latest' }}
