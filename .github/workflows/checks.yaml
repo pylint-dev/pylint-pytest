@@ -50,18 +50,10 @@ jobs:
         id: cache-venv
         uses: actions/cache@v3.3.2
         with:
-          path: venv
+          path: .venv
           key: >-
             ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{
             steps.generate-python-key.outputs.key }}
-      - name: Create Python virtual environment
-        if: steps.cache-venv.outputs.cache-hit != 'true'
-        run: |
-          python -m venv venv
-          . venv/bin/activate
-          python -m pip install -U pip setuptools wheel
-          pip install .
-          pip install pre-commit
       - name: Generate pre-commit restore key
         id: generate-pre-commit-key
         run: >-
@@ -74,11 +66,9 @@ jobs:
           path: ${{ env.PRE_COMMIT_CACHE }}
           key: >-
             ${{ runner.os }}-${{ steps.generate-pre-commit-key.outputs.key }}
-      - name: Install pre-commit dependencies
-        if: steps.cache-precommit.outputs.cache-hit != 'true'
-        run: |
-          . venv/bin/activate
-          pre-commit install --install-hooks
+      - name: install dependencies
+        if: steps.cache-venv.outputs.cache-hit != 'true'
+        run: make install
 
   pylint:
     name: pylint
@@ -98,7 +88,7 @@ jobs:
         id: cache-venv
         uses: actions/cache@v3.3.2
         with:
-          path: venv
+          path: .venv
           fail-on-cache-miss: true
           key: ${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{ needs.prepare-base.outputs.python-key }}
       - name: Restore pre-commit environment
@@ -108,8 +98,9 @@ jobs:
           path: ${{ env.PRE_COMMIT_CACHE }}
           fail-on-cache-miss: true
           key: ${{ runner.os }}-${{ needs.prepare-base.outputs.pre-commit-key }}
+      - name: install dependencies
+        run: make install
       - name: Run pylint checks
         run: |
-          . venv/bin/activate
-          pip install .
+          . .venv/bin/activate
           pre-commit run pylint --all-files

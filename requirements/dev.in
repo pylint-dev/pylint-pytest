@@ -1,0 +1,10 @@
+# to handle dependencies
+pip-tools
+wheel
+
+# to run linters and formatters at commit time and CI
+pre-commit
+
+# used to run tests
+pytest
+pytest-cov
