@@ -40,3 +40,15 @@ class TestUnusedImport(BasePytestTester):
         for pytest to do its magic"""
         self.run_linter(enable_plugin)
         self.verify_messages(0 if enable_plugin else 1)
+
+    @pytest.mark.parametrize("enable_plugin", [True, False])
+    def test_module(self, enable_plugin):
+        """an unused module import shall still be an error"""
+        self.run_linter(enable_plugin)
+        self.verify_messages(1)
+
+    @pytest.mark.parametrize("enable_plugin", [True, False])
+    def test_mark_usesfixtures(self, enable_plugin):
+        """an unused module import shall still be an error"""
+        self.run_linter(enable_plugin)
+        self.verify_messages(0 if enable_plugin else 1)
