@@ -73,18 +73,18 @@ class FixtureChecker(BasePytestChecker):
     }
 
     # Store all fixtures discovered by pytest session
-    pytest_fixtures: FixtureDict = {}
+    _pytest_fixtures: FixtureDict = {}
     # Stores all used function arguments
-    invoked_with_func_args: set[str] = set()
+    _invoked_with_func_args: set[str] = set()
     # Stores all invoked fixtures through @pytest.mark.usefixture(...)
-    invoked_with_usefixtures: set[str] = set()
+    _invoked_with_usefixtures: set[str] = set()
 
     def close(self):
         """restore & reset class attr for testing"""
         # reset fixture info storage
-        FixtureChecker.pytest_fixtures = {}
-        FixtureChecker.invoked_with_func_args = set()
-        FixtureChecker.invoked_with_usefixtures = set()
+        FixtureChecker._pytest_fixtures = {}
+        FixtureChecker._invoked_with_func_args = set()
+        FixtureChecker._invoked_with_usefixtures = set()
 
     def visit_module(self, node):
         """
@@ -92,9 +92,9 @@ class FixtureChecker(BasePytestChecker):
         - invoke pytest session to collect available fixtures
         - create containers for the module to store args and fixtures
         """
-        FixtureChecker.pytest_fixtures = {}
-        FixtureChecker.invoked_with_func_args = set()
-        FixtureChecker.invoked_with_usefixtures = set()
+        FixtureChecker._pytest_fixtures = {}
+        FixtureChecker._invoked_with_func_args = set()
+        FixtureChecker._invoked_with_usefixtures = set()
 
         is_test_module = False
         for pattern in FILE_NAME_PATTERNS:
@@ -128,7 +128,7 @@ class FixtureChecker(BasePytestChecker):
                 # restore sys.path
                 sys.path = sys_path
 
-                FixtureChecker.pytest_fixtures = fixture_collector.fixtures
+                FixtureChecker._pytest_fixtures = fixture_collector.fixtures
 
                 legitimate_failure_paths = set(
                     collection_report.nodeid
@@ -212,11 +212,11 @@ class FixtureChecker(BasePytestChecker):
                     if _is_pytest_mark_usefixtures(decorator):
                         # save all visited fixtures
                         for arg in decorator.args:
-                            self.invoked_with_usefixtures.add(arg.value)
+                            self._invoked_with_usefixtures.add(arg.value)
                     if int(pytest.__version__.split(".")[0]) >= 3 and _is_pytest_fixture(
                         decorator, fixture=False
                     ):
                         # raise deprecated warning for @pytest.yield_fixture
                         self.add_message("deprecated-pytest-yield-fixture", node=node)
             for arg in node.args.args:
-                self.invoked_with_func_args.add(arg.name)
+                self._invoked_with_func_args.add(arg.name)

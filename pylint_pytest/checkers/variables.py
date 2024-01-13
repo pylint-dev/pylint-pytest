@@ -13,6 +13,9 @@ from .fixture import FixtureChecker
 class CustomVariablesChecker(VariablesChecker):
     """Overrides the default VariablesChecker of pylint to discard unwanted warning messages"""
 
+    # pylint: disable=protected-access
+    # this class needs to access the fixture checker registries
+
     def add_message(
         self,
         msgid: str,
@@ -44,17 +47,17 @@ class CustomVariablesChecker(VariablesChecker):
                 node
                 and isinstance(node.parent, Module)
                 and node.parent.name.split(".")[-1] == "conftest"
-                and fixture_name in FixtureChecker.pytest_fixtures
+                and fixture_name in FixtureChecker._pytest_fixtures
             ):
                 return
 
             # imported fixture is referenced in test/fixture func
             elif (
-                fixture_name in FixtureChecker.invoked_with_func_args
-                and fixture_name in FixtureChecker.pytest_fixtures
+                fixture_name in FixtureChecker._invoked_with_func_args
+                and fixture_name in FixtureChecker._pytest_fixtures
             ):
                 if _is_same_module(
-                    fixtures=FixtureChecker.pytest_fixtures,
+                    fixtures=FixtureChecker._pytest_fixtures,
                     import_node=node,
                     fixture_name=fixture_name,
                 ):
@@ -62,11 +65,11 @@ class CustomVariablesChecker(VariablesChecker):
 
             # fixture is referenced in @pytest.mark.usefixtures
             elif (
-                fixture_name in FixtureChecker.invoked_with_usefixtures
-                and fixture_name in FixtureChecker.pytest_fixtures
+                fixture_name in FixtureChecker._invoked_with_usefixtures
+                and fixture_name in FixtureChecker._pytest_fixtures
             ):
                 if _is_same_module(
-                    fixtures=FixtureChecker.pytest_fixtures,
+                    fixtures=FixtureChecker._pytest_fixtures,
                     import_node=node,
                     fixture_name=fixture_name,
                 ):
@@ -79,15 +82,15 @@ class CustomVariablesChecker(VariablesChecker):
             and _can_use_fixture(node.parent.parent)
             and isinstance(node.parent, Arguments)
         ):
-            if node.name in FixtureChecker.pytest_fixtures:
+            if node.name in FixtureChecker._pytest_fixtures:
                 # argument is used as a fixture
                 return
 
             fixnames = (
-                arg.name for arg in node.parent.args if arg.name in FixtureChecker.pytest_fixtures
+                arg.name for arg in node.parent.args if arg.name in FixtureChecker._pytest_fixtures
             )
             for fixname in fixnames:
-                if node.name in FixtureChecker.pytest_fixtures[fixname][0].argnames:
+                if node.name in FixtureChecker._pytest_fixtures[fixname][0].argnames:
                     # argument is used by a fixture
                     return
 
@@ -97,7 +100,7 @@ class CustomVariablesChecker(VariablesChecker):
             and node
             and _can_use_fixture(node.parent.parent)
             and isinstance(node.parent, Arguments)
-            and node.name in FixtureChecker.pytest_fixtures
+            and node.name in FixtureChecker._pytest_fixtures
         ):
             return
 
