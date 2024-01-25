@@ -7,17 +7,15 @@ from pathlib import Path
 
 import astroid
 import pytest
-from pylint.checkers.variables import VariablesChecker
 
 from ..utils import (
     _can_use_fixture,
     _is_pytest_fixture,
     _is_pytest_mark,
     _is_pytest_mark_usefixtures,
-    _is_same_module,
 )
 from . import BasePytestChecker
-from .types import FixtureDict, replacement_add_message
+from .types import FixtureDict
 
 # TODO: support pytest python_files configuration
 FILE_NAME_PATTERNS: tuple[str, ...] = ("test_*.py", "*_test.py")
@@ -80,19 +78,9 @@ class FixtureChecker(BasePytestChecker):
     _invoked_with_func_args: set[str] = set()
     # Stores all invoked fixtures through @pytest.mark.usefixture(...)
     _invoked_with_usefixtures: set[str] = set()
-    _original_add_message = replacement_add_message
-
-    def open(self):
-        # patch VariablesChecker.add_message
-        FixtureChecker._original_add_message = VariablesChecker.add_message
-        VariablesChecker.add_message = FixtureChecker.patch_add_message
 
     def close(self):
         """restore & reset class attr for testing"""
-        # restore add_message
-        VariablesChecker.add_message = FixtureChecker._original_add_message
-        FixtureChecker._original_add_message = replacement_add_message
-
         # reset fixture info storage
         FixtureChecker._pytest_fixtures = {}
         FixtureChecker._invoked_with_func_args = set()
@@ -232,84 +220,3 @@ class FixtureChecker(BasePytestChecker):
                         self.add_message("deprecated-pytest-yield-fixture", node=node)
             for arg in node.args.args:
                 self._invoked_with_func_args.add(arg.name)
-
-    # pylint: disable=bad-staticmethod-argument # The function itself is an if-return logic.
-    @staticmethod
-    def patch_add_message(
-        self, msgid, line=None, node=None, args=None, confidence=None, col_offset=None
-    ):
-        """
-        - intercept and discard unwanted warning messages
-        """
-        # check W0611 unused-import
-        if msgid == "unused-import":
-            # actual attribute name is not passed as arg so...dirty hack
-            # message is usually in the form of '%s imported from %s (as %)'
-            message_tokens = args.split()
-            fixture_name = message_tokens[0]
-
-            # ignoring 'import %s' message
-            if message_tokens[0] == "import" and len(message_tokens) == 2:
-                pass
-
-            # fixture is defined in other modules and being imported to
-            # conftest for pytest magic
-            elif (
-                isinstance(node.parent, astroid.Module)
-                and node.parent.name.split(".")[-1] == "conftest"
-                and fixture_name in FixtureChecker._pytest_fixtures
-            ):
-                return
-
-            # imported fixture is referenced in test/fixture func
-            elif (
-                fixture_name in FixtureChecker._invoked_with_func_args
-                and fixture_name in FixtureChecker._pytest_fixtures
-            ):
-                if _is_same_module(
-                    fixtures=FixtureChecker._pytest_fixtures,
-                    import_node=node,
-                    fixture_name=fixture_name,
-                ):
-                    return
-
-            # fixture is referenced in @pytest.mark.usefixtures
-            elif (
-                fixture_name in FixtureChecker._invoked_with_usefixtures
-                and fixture_name in FixtureChecker._pytest_fixtures
-            ):
-                if _is_same_module(
-                    fixtures=FixtureChecker._pytest_fixtures,
-                    import_node=node,
-                    fixture_name=fixture_name,
-                ):
-                    return
-
-        # check W0613 unused-argument
-        if (
-            msgid == "unused-argument"
-            and _can_use_fixture(node.parent.parent)
-            and isinstance(node.parent, astroid.Arguments)
-        ):
-            if node.name in FixtureChecker._pytest_fixtures:
-                # argument is used as a fixture
-                return
-
-            fixnames = (
-                arg.name for arg in node.parent.args if arg.name in FixtureChecker._pytest_fixtures
-            )
-            for fixname in fixnames:
-                if node.name in FixtureChecker._pytest_fixtures[fixname][0].argnames:
-                    # argument is used by a fixture
-                    return
-
-        # check W0621 redefined-outer-name
-        if (
-            msgid == "redefined-outer-name"
-            and _can_use_fixture(node.parent.parent)
-            and isinstance(node.parent, astroid.Arguments)
-            and node.name in FixtureChecker._pytest_fixtures
-        ):
-            return
-
-        FixtureChecker._original_add_message(self, msgid, line, node, args, confidence, col_offset)
