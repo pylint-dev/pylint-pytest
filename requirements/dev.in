@@ -1,3 +1,7 @@
+# Install pylint-pytest and its dependencies.
+# tl;dr: Install pylint
+-e file:.#egg=pylint-pytest
+
 # to handle dependencies
 pip-tools
 wheel

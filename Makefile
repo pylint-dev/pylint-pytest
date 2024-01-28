@@ -16,7 +16,7 @@ requirements/dev.txt: .venv requirements/dev.in pyproject.toml
 		--quiet --generate-hashes --max-rounds=20 --strip-extras \
 		--resolver=backtracking \
 		--output-file requirements/dev.txt \
-		 requirements/dev.in pyproject.toml
+		 requirements/dev.in
 
 # upgrades the dependencies to their latest/matching version
 .PHONY: upgrade
@@ -26,14 +26,12 @@ upgrade: .venv
 		--upgrade \
 		--resolver=backtracking \
 		--output-file requirements/dev.txt \
-		requirements/dev.in pyproject.toml
+		requirements/dev.in
 
 
 # creates the venv if not present then install the dependencies, the package and pre-commit
 .PHONY: install
 install: .venv
 	pip-sync requirements/dev.txt
-	# install pylint_pytest (deps are already handled by the line before)
-	pip install --no-deps -e .
 	# install pre-commit hooks
 	pre-commit install
