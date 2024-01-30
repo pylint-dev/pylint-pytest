@@ -1,3 +1,6 @@
+# For linting purposes, only pylint>3 is supported
+pylint>=3
+
 # to handle dependencies
 pip-tools
 wheel

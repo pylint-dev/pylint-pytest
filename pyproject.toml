@@ -45,13 +45,7 @@ dependencies = [
     "pytest>=4.6",
 ]
 
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-cov",
-    # For linting purposes, only pylint>3 is supported
-    "pylint>=3",
-]
+# [project.optional-dependencies] moved to requirements/dev.in
 
 [project.urls]
 Changelog = "https://github.com/pylint-dev/pylint-pytest/blob/master/CHANGELOG.md"

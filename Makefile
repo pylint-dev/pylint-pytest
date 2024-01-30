@@ -11,12 +11,12 @@ export PYTHONPATH=.
 	pip install --quiet --upgrade 'pip==23.3.1' 'pip-tools==7.3'
 
 # generates a lock file with pinned version of all dependencies to be used by the CI and local devs
-requirements/dev.txt: .venv requirements/dev.in pyproject.toml
+requirements/dev.txt: .venv requirements/dev.in
 	pip-compile \
 		--quiet --generate-hashes --max-rounds=20 --strip-extras \
 		--resolver=backtracking \
 		--output-file requirements/dev.txt \
-		 requirements/dev.in pyproject.toml
+		 requirements/dev.in
 
 # upgrades the dependencies to their latest/matching version
 .PHONY: upgrade
@@ -26,7 +26,7 @@ upgrade: .venv
 		--upgrade \
 		--resolver=backtracking \
 		--output-file requirements/dev.txt \
-		requirements/dev.in pyproject.toml
+		requirements/dev.in
 
 
 # creates the venv if not present then install the dependencies, the package and pre-commit
