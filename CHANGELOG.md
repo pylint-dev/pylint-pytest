@@ -2,15 +2,25 @@
 
 ## [Unreleased]
 
+## [2.0.0a0] - 2024-02-02
+
 ### Added
 
-* Migrate setup.py to pyproject.toml (https://github.com/pylint-dev/pylint-pytest/pull/8)
-* Support for Python 3.12 (https://github.com/pylint-dev/pylint-pytest/issues/3,
-  "side effect" of https://github.com/pylint-dev/pylint-pytest/pull/8)
+* Increased reproducibility of the project, by using `pip-compile` for the development dependencies
+  (https://github.com/pylint-dev/pylint-pytest/pull/28, small bugfix in https://github.com/pylint-dev/pylint-pytest/pull/39)
+* Introduced @dependabot (part of https://github.com/pylint-dev/pylint-pytest/pull/28)
 
 ### Removed
 
 * Support for Python 3.6 & 3.7 (https://github.com/pylint-dev/pylint-pytest/pull/23)
+
+### Improved
+
+* Migrate setup.py to pyproject.toml (https://github.com/pylint-dev/pylint-pytest/pull/8)
+* Support for Python 3.12 (https://github.com/pylint-dev/pylint-pytest/issues/3,
+  "side effect" of https://github.com/pylint-dev/pylint-pytest/pull/8)
+* Improved reliability of the `FixtureChecker` class (https://github.com/pylint-dev/pylint-pytest/pull/29)
+* Minor CI + License updates (in 29f0c33, e0e529a, 8f56d1c)
 
 ## [1.1.7] - 2023-12-04
 
