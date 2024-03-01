@@ -4,6 +4,7 @@ import fnmatch
 import io
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import astroid
 import pytest
@@ -17,6 +18,13 @@ from ..utils import (
 from . import BasePytestChecker
 from .types import FixtureDict
 
+if TYPE_CHECKING:
+    try:
+        from pytest import CollectReport
+    except ImportError:
+        # pytest<=7.0.0rc1
+        from _pytest.reports import CollectReport
+
 # TODO: support pytest python_files configuration
 FILE_NAME_PATTERNS: tuple[str, ...] = ("test_*.py", "*_test.py")
 ARGUMENT_ARE_KEYWORD_ONLY = (
@@ -27,7 +35,7 @@ ARGUMENT_ARE_KEYWORD_ONLY = (
 class FixtureCollector:
     # Same as ``_pytest.fixtures.FixtureManager._arg2fixturedefs``.
     fixtures: FixtureDict = {}
-    errors: set[pytest.CollectReport] = set()
+    errors: set[CollectReport] = set()
 
     def pytest_sessionfinish(self, session):
         # pylint: disable=protected-access
