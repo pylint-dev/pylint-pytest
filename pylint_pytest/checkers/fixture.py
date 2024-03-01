@@ -2,7 +2,7 @@ import fnmatch
 import io
 import sys
 from pathlib import Path
-from typing import Set, Tuple
+from typing import TYPE_CHECKING, Set, Tuple
 
 import astroid
 import pytest
@@ -18,6 +18,13 @@ from ..utils import (
 from . import BasePytestChecker
 from .types import FixtureDict, replacement_add_message
 
+if TYPE_CHECKING:
+    try:
+        from pytest import CollectReport
+    except ImportError:
+        # pytest<=7.0.0rc1 did not re-export it at the top level
+        from _pytest.reports import CollectReport
+
 # TODO: support pytest python_files configuration
 FILE_NAME_PATTERNS: Tuple[str, ...] = ("test_*.py", "*_test.py")
 ARGUMENT_ARE_KEYWORD_ONLY = (
@@ -29,7 +36,7 @@ class FixtureCollector:
     def __init__(self):
         # Same as ``_pytest.fixtures.FixtureManager._arg2fixturedefs``.
         self.fixtures: FixtureDict = {}
-        self.errors: Set[pytest.CollectReport] = set()
+        self.errors: Set["CollectReport"] = set()
 
     def pytest_sessionfinish(self, session):
         # pylint: disable=protected-access
