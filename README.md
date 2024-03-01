@@ -5,9 +5,10 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dd/pylint-pytest)
 ![PyPI - License](https://img.shields.io/pypi/l/pylint-pytest)
 
-[![Github - Testing](https://github.com/pylint-dev/pylint-pytest/actions/workflows/run-tests.yaml/badge.svg)](https://github.com/pylint-dev/pylint-pytest/actions/workflows/run-tests.yaml)
+[![Github - Testing](https://github.com/pylint-dev/pylint-pytest/actions/workflows/tests.yaml/badge.svg)](https://github.com/pylint-dev/pylint-pytest/actions/workflows/tests.yaml)
 [![codecov](https://codecov.io/gh/pylint-dev/pylint-pytest/graph/badge.svg?token=NhZDLKmomd)](https://codecov.io/gh/pylint-dev/pylint-pytest)
 
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/pylint-dev/pylint-pytest/master.svg)](https://results.pre-commit.ci/latest/github/pylint-dev/pylint-pytest/master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
