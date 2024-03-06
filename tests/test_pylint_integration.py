@@ -6,6 +6,7 @@ Notes:
     Tests here are voluntarily minimalistic, the goal is not to test pylint, it is only checking
     that pylint_pytest integrates just fine
 """
+
 import subprocess
 
 

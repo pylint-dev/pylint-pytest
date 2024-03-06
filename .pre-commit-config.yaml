@@ -24,7 +24,7 @@ repos:
         args:
           - --pytest-test-first
   - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-    rev: 0.2.1
+    rev: 0.2.3
     hooks:
       - id: yamlfmt
         args:
@@ -35,14 +35,14 @@ repos:
           - --offset
           - '2'
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.292
+    rev: v0.3.0
     hooks:
       - id: ruff
         args:
           - --fix
         exclude: tests/input/
   - repo: https://github.com/psf/black
-    rev: 23.9.1
+    rev: 24.2.0
     hooks:
       - id: black
   - repo: https://github.com/asottile/blacken-docs
@@ -74,7 +74,7 @@ repos:
         language: pygrep
         types: [python]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.6.0
+    rev: v1.8.0
     hooks:
       - id: mypy
         exclude: tests/input/
