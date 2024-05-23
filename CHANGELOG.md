@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [1.1.8] - 2024-05-23
+
+This is a small release to block updating to `pytest>8.2.0`, as it causes an error (https://github.com/pylint-dev/pylint-pytest/issues/67)
+
+### Fixed
+
+* `pylint-pytest` and `pytest>8.2.1` create a weird error for `pylint` (https://github.com/pylint-dev/pylint-pytest/issues/67)
+
 ## [1.1.7] - 2023-12-04
 
 This is a small release to support additionally Pylint v3.
