@@ -24,7 +24,7 @@ class TestRedefinedOuterName(BasePytestTester):
     @pytest.mark.parametrize("enable_plugin", [True, False])
     def test_caller_not_a_test_func(self, enable_plugin):
         self.run_linter(enable_plugin)
-        self.verify_messages(1)
+        self.verify_messages(1 if enable_plugin else 2)
 
     @pytest.mark.parametrize("enable_plugin", [True, False])
     def test_args_and_kwargs(self, enable_plugin):
