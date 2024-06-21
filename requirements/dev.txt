@@ -4,9 +4,9 @@
 #
 #    pip-compile --generate-hashes --max-rounds=20 --output-file=requirements/dev.txt --strip-extras requirements/dev.in
 #
-astroid==3.0.1 \
-    --hash=sha256:7d5895c9825e18079c5aeac0572bc2e4c83205c95d416e0b4fee8bc361d2d9ca \
-    --hash=sha256:86b0bb7d7da0be1a7c4aedb7974e391b32d4ed89e33de6ed6902b4b15c97577e
+astroid==3.1.0 \
+    --hash=sha256:951798f922990137ac090c53af473db7ab4e70c770e6d7fae0cec59f74411819 \
+    --hash=sha256:ac248253bfa4bd924a0de213707e7ebeeb3138abeb48d798784ead1e56d419d4
     # via pylint
 build==1.0.3 \
     --hash=sha256:538aab1b64f9828977f84bc63ae570b060a8ed1be419e7870b8b4fc5e6ea553b \
@@ -73,9 +73,7 @@ coverage==7.3.2 \
     --hash=sha256:f94b734214ea6a36fe16e96a70d941af80ff3bfd716c141300d95ebc85339738 \
     --hash=sha256:fa28e909776dc69efb6ed975a63691bc8172b64ff357e663a1bb06ff3c9b589a \
     --hash=sha256:fe494faa90ce6381770746077243231e0b83ff3f17069d748f645617cefe19d4
-    # via
-    #   coverage
-    #   pytest-cov
+    # via pytest-cov
 dill==0.3.7 \
     --hash=sha256:76b122c08ef4ce2eedcd4d1abd8e641114bfc6c2867f49f3c41facf65bf19f5e \
     --hash=sha256:cc1c8b182eb3013e24bd475ff2e9295af86c1a38eb1aff128dac8962a9ce3c03
@@ -114,9 +112,9 @@ packaging==23.2 \
     # via
     #   build
     #   pytest
-pip-tools==7.3.0 \
-    --hash=sha256:8717693288720a8c6ebd07149c93ab0be1fced0b5191df9e9decd3263e20d85e \
-    --hash=sha256:8e9c99127fe024c025b46a0b2d15c7bd47f18f33226cf7330d35493663fc1d1d
+pip-tools==7.4.1 \
+    --hash=sha256:4c690e5fbae2f21e87843e89c26191f0d9454f362d8acdbd695716493ec8b3a9 \
+    --hash=sha256:864826f5073864450e24dbeeb85ce3920cdfb09848a3d69ebf537b521f14bcc9
     # via -r requirements/dev.in
 platformdirs==4.0.0 \
     --hash=sha256:118c954d7e949b35437270383a3f2531e99dd93cf7ce4dc8340d3356d30f173b \
@@ -128,27 +126,29 @@ pluggy==1.3.0 \
     --hash=sha256:cf61ae8f126ac6f7c451172cf30e3e43d3ca77615509771b3a984a0730651e12 \
     --hash=sha256:d89c696a773f8bd377d18e5ecda92b7a3793cbe66c87060a6fb58c7b6e1061f7
     # via pytest
-pre-commit==3.6.0 \
-    --hash=sha256:c255039ef399049a5544b6ce13d135caba8f2c28c3b4033277a788f434308376 \
-    --hash=sha256:d30bad9abf165f7785c15a21a1f46da7d0677cb00ee7ff4c579fd38922efe15d
+pre-commit==3.7.0 \
+    --hash=sha256:5eae9e10c2b5ac51577c3452ec0a490455c45a0533f7960f993a0d01e59decab \
+    --hash=sha256:e209d61b8acdcf742404408531f0c37d49d2c734fd7cff2d6076083d191cb060
     # via -r requirements/dev.in
-pylint==3.0.3 \
-    --hash=sha256:58c2398b0301e049609a8429789ec6edf3aabe9b6c5fec916acd18639c16de8b \
-    --hash=sha256:7a1585285aefc5165db81083c3e06363a27448f6b467b3b0f30dbd0ac1f73810
+pylint==3.1.0 \
+    --hash=sha256:507a5b60953874766d8a366e8e8c7af63e058b26345cfcb5f91f89d987fd6b74 \
+    --hash=sha256:6a69beb4a6f63debebaab0a3477ecd0f559aa726af4954fc948c51f7a2549e23
     # via -r requirements/dev.in
 pyproject-hooks==1.0.0 \
     --hash=sha256:283c11acd6b928d2f6a7c73fa0d01cb2bdc5f07c57a2eeb6e83d5e56b97976f8 \
     --hash=sha256:f271b298b97f5955d53fb12b72c1fb1948c22c1a6b70b315c54cedaca0264ef5
-    # via build
+    # via
+    #   build
+    #   pip-tools
 pytest==7.4.3 \
     --hash=sha256:0d009c083ea859a71b76adf7c1d502e4bc170b80a8ef002da5806527b9591fac \
     --hash=sha256:d989d136982de4e3b29dabcc838ad581c64e8ed52c11fbe86ddebd9da0818cd5
     # via
     #   -r requirements/dev.in
     #   pytest-cov
-pytest-cov==4.1.0 \
-    --hash=sha256:3904b13dfbfec47f003b8e77fd5b589cd11904a21ddf1ab38a64f204d6a10ef6 \
-    --hash=sha256:6ba70b9e97e69fcc3fb45bfeab2d0a138fb65c4d0d6a41ef33983ad114be8c3a
+pytest-cov==5.0.0 \
+    --hash=sha256:4f0764a1219df53214206bf1feea4633c3b558a2925c8b59f144f682861ce652 \
+    --hash=sha256:5837b58e9f6ebd335b0f8060eecce69b662415b16dc503883a02f45dfeb14857
     # via -r requirements/dev.in
 pyyaml==6.0.1 \
     --hash=sha256:04ac92ad1925b2cff1db0cfebffb6ffc43457495c9b3c39d3fcae417d7125dc5 \
@@ -210,9 +210,9 @@ virtualenv==20.25.0 \
     --hash=sha256:4238949c5ffe6876362d9c0180fc6c3a824a7b12b80604eeb8085f2ed7460de3 \
     --hash=sha256:bf51c0d9c7dd63ea8e44086fa1e4fb1093a31e963b86959257378aef020e1f1b
     # via pre-commit
-wheel==0.42.0 \
-    --hash=sha256:177f9c9b0d45c47873b619f5b650346d632cdc35fb5e4d25058e09c9e581433d \
-    --hash=sha256:c45be39f7882c9d34243236f2d63cbd58039e360f85d0913425fbd7ceea617a8
+wheel==0.43.0 \
+    --hash=sha256:465ef92c69fa5c5da2d1cf8ac40559a8c940886afcef87dcf14b9470862f1d85 \
+    --hash=sha256:55c570405f142630c6b9f72fe09d9b67cf1477fcf543ae5b8dcb1f5b7377da81
     # via
     #   -r requirements/dev.in
     #   pip-tools
