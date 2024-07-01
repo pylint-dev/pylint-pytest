@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import logging
 import os
-import sys
 from abc import ABC
 from pathlib import Path
 from pprint import pprint
 
 import astroid
+import pytest
 from pylint.checkers import BaseChecker
 from pylint.testutils import MessageTest, UnittestLinter
 from pylint.utils import ASTWalker
@@ -28,6 +29,13 @@ class BasePytestTester(ABC):
     MSG_ID: str
     msgs: list[MessageTest] = []
 
+    # Set by ``test_name_fixture``
+    test_name: str = ""
+
+    @pytest.fixture(autouse=True)
+    def test_name_fixture(self, request):
+        self.test_name = request.node.originalname.replace("test_", "", 1)
+
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         if not hasattr(cls, "MSG_ID") or not isinstance(cls.MSG_ID, str) or not cls.MSG_ID:
@@ -35,21 +43,27 @@ class BasePytestTester(ABC):
 
     enable_plugin = True
 
+    @pytest.fixture(autouse=True)
+    def with_no_warnings(self, caplog):  # pylint: disable=no-self-use
+        with caplog.at_level(logging.WARNING):
+            yield
+
+        records = caplog.get_records("call")
+        assert not records, records
+
     def run_linter(self, enable_plugin):
         self.enable_plugin = enable_plugin
 
-        # pylint: disable-next=protected-access
-        target_test_file = sys._getframe(1).f_code.co_name.replace("test_", "", 1)
         file_path = os.path.join(
             get_test_root_path(),
             "input",
             self.MSG_ID,
-            target_test_file + ".py",
+            self.test_name + ".py",
         )
 
         with open(file_path) as fin:
             content = fin.read()
-            module = astroid.parse(content, module_name=target_test_file)
+            module = astroid.parse(content, module_name=self.test_name)
             module.file = fin.name
 
         self.walk(module)  # run all checkers
