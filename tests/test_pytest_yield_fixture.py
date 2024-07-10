@@ -1,6 +1,6 @@
-from base_tester import BasePytestTester
-
 from pylint_pytest.checkers.fixture import FixtureChecker
+
+from .base_tester import BasePytestTester
 
 
 class TestDeprecatedPytestYieldFixture(BasePytestTester):

@@ -1,7 +1,8 @@
-from typing import Any, Optional
+from __future__ import annotations
 
-from astroid import Arguments, Module
-from astroid.nodes.node_ng import NodeNG
+from typing import Any
+
+from astroid import Arguments, Module, NodeNG
 from pylint.checkers.variables import VariablesChecker
 from pylint.interfaces import Confidence
 
@@ -19,13 +20,13 @@ class CustomVariablesChecker(VariablesChecker):
     def add_message(
         self,
         msgid: str,
-        line: Optional[int] = None,
-        node: Optional[NodeNG] = None,
+        line: int | None = None,
+        node: NodeNG | None = None,
         args: Any = None,
-        confidence: Confidence = None,
-        col_offset: Optional[int] = None,
-        end_lineno: Optional[int] = None,
-        end_col_offset: Optional[int] = None,
+        confidence: Confidence | None = None,
+        col_offset: int | None = None,
+        end_lineno: int | None = None,
+        end_col_offset: int | None = None,
     ) -> None:
         """
         - intercept and discard unwanted warning messages

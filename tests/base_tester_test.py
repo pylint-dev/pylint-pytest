@@ -1,5 +1,6 @@
 import pytest
-from base_tester import BasePytestTester, get_test_root_path
+
+from .base_tester import BasePytestTester, get_test_root_path
 
 # pylint: disable=unused-variable
 

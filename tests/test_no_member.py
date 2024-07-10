@@ -1,8 +1,9 @@
 import pytest
-from base_tester import BasePytestTester
 from pylint.checkers.typecheck import TypeChecker
 
 from pylint_pytest.checkers.class_attr_loader import ClassAttrLoader
+
+from .base_tester import BasePytestTester
 
 
 class TestNoMember(BasePytestTester):

@@ -117,7 +117,9 @@ exclude = [
     "^.venv",       # Ignore installed packages
     "^.tox",        # Ignore tox virtualenvs
     "^.cache",      # Ignore CI-defined .cache
-    "^tests/input/" # Ignore test inputs
+    "^tests/input/", # Ignore test inputs
+    "^build/",      # Ignore build inputs
+    "^dist/",       # Ignore build inputs
 ]
 
 [[tool.mypy.overrides]]

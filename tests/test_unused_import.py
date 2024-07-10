@@ -1,8 +1,9 @@
 import pytest
-from base_tester import BasePytestTester
 
 from pylint_pytest.checkers.fixture import FixtureChecker
 from pylint_pytest.checkers.variables import CustomVariablesChecker
+
+from .base_tester import BasePytestTester
 
 
 class TestUnusedImport(BasePytestTester):

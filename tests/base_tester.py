@@ -24,7 +24,7 @@ def get_test_root_path() -> Path:
 
 class BasePytestTester(ABC):
     CHECKER_CLASS = BaseChecker
-    IMPACTED_CHECKER_CLASSES: list[BaseChecker] = []
+    IMPACTED_CHECKER_CLASSES: list[type[BaseChecker]] = []
     MSG_ID: str
     msgs: list[MessageTest] = []
 

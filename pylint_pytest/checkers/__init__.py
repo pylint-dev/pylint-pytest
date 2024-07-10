@@ -9,7 +9,9 @@ class BasePytestChecker(BaseChecker):
         # Since https://github.com/pylint-dev/pylint/pull/8404, pylint does not need this
         # __implements__ pattern. keeping it for retro compatibility with pylint==2.x
         # pylint: disable=import-outside-toplevel,no-name-in-module
-        from pylint.interfaces import IAstroidChecker
+        from pylint.interfaces import (  # type: ignore[attr-defined] # It is defined in pylint~=2
+            IAstroidChecker,
+        )
 
         __implements__ = IAstroidChecker
 

@@ -1,9 +1,11 @@
 import re
+from collections.abc import Sequence
 
 import pytest
-from base_tester import BasePytestTester
 
 from pylint_pytest.checkers.fixture import FixtureChecker
+
+from .base_tester import BasePytestTester
 
 
 class TestCannotEnumerateFixtures(BasePytestTester):
@@ -18,6 +20,9 @@ class TestCannotEnumerateFixtures(BasePytestTester):
         if enable_plugin:
             msg = self.msgs[0]
 
+            assert isinstance(msg.args, Sequence)
+            assert len(msg.args) == 3
+
             # Asserts/Fixes duplicate filenames in output:
             # https://github.com/reverbc/pylint-pytest/pull/22/files#r698204470
             filename_arg = msg.args[0]
@@ -28,7 +33,7 @@ class TestCannotEnumerateFixtures(BasePytestTester):
 
             # Assert `stdout` is non-empty.
             assert msg.args[1]
-            # Assert `stderr` is empty (pytest runs stably, even though fixture collection fails).
+            # Assert `stderr` is empty (pytest runs stably, even if the fixture collection fails).
             assert not msg.args[2]
 
     @pytest.mark.parametrize("enable_plugin", [True, False])
@@ -38,6 +43,9 @@ class TestCannotEnumerateFixtures(BasePytestTester):
 
         if enable_plugin:
             msg = self.msgs[0]
+
+            assert isinstance(msg.args, Sequence)
+            assert len(msg.args) == 3
 
             # ... somehow, since `import_corrupted_module.py` imports `no_such_package.py`
             # both of their names are returned in the message.
