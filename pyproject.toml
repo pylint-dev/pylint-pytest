@@ -102,6 +102,9 @@ paths.source = [
     "pylint_pytest/",
 ]
 
+[tool.isort]
+profile = "black"
+
 [tool.mypy]
 python_version = "3.8"
 check_untyped_defs = true
