@@ -9,5 +9,6 @@ wheel
 pre-commit
 
 # used to run tests
+tox
 pytest
 pytest-cov
