@@ -6,9 +6,18 @@ pip-tools
 wheel
 
 # to run linters and formatters at commit time and CI
+black
+ruff
+mypy
 pre-commit
+
+# mypy plugins
+types-networkx
 
 # used to run tests
 tox
 pytest
 pytest-cov
+pytest-pudb
+# pytest-pycharm # It is a bit unstable: https://github.com/jlubcke/pytest-pycharm/issues/13
+ipython

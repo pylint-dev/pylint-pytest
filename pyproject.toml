@@ -91,8 +91,8 @@ report.exclude_lines = [
     # Don't complain about abstract methods, they aren't run:
     '@(abc\.)?abstractmethod',
     'class .*\bProtocol\):',
-    ## Defaults must be re-listed; we cannot `extend_exclude_lines`
-
+    # Defaults must be re-listed; we cannot `extend_exclude_lines` #
+    # ------------------------------------------------------------ #
     # Ignore type-checking blocks
     'if TYPE_CHECKING:',
     # Defensive programming does not need to be covered
@@ -208,7 +208,6 @@ load-plugins= [
     # "pylint.extensions.while_used",  # highly opinionated
     "pylint.extensions.dict_init_mutate",
     "pylint.extensions.dunder",
-    "pylint.extensions.typing",
     # "pylint.extensions.magic_value",  # highly opinionated
 ]
 disable=[
