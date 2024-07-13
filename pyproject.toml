@@ -138,10 +138,14 @@ check_untyped_defs = true
 addopts = "--verbose --cov-config=pyproject.toml --cov-report=html"
 
 [tool.ruff]
+fix = true
 # ruff is less lenient than pylint and does not make any exceptions
 # (for docstrings, strings and comments in particular).
 line-length = 100
 
+target-version = "py38"
+
+[tool.ruff.lint]
 select = [
     "E",  # pycodestyle
     "F",  # pyflakes
@@ -156,12 +160,10 @@ ignore = [
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
 ]
 
-target-version = "py38"
-
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.extend-per-file-ignores]
+[tool.ruff.lint.extend-per-file-ignores]
 "tests/**/test_*.py" = [
     "S101", # pytest works with `assert`s
     "FBT", # Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
@@ -178,7 +180,6 @@ convention = "google"
 ]
 
 [tool.pylint]
-
 py-version = "3.8"
 
 ignore-paths="tests/input" # Ignore test inputs

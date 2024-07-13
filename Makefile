@@ -16,6 +16,7 @@ requirements/dev.txt: .venv requirements/dev.in
 		--quiet --generate-hashes --max-rounds=20 --strip-extras \
 		--resolver=backtracking \
 		--output-file requirements/dev.txt \
+		 pyproject.toml \
 		 requirements/dev.in
 
 # upgrades the dependencies to their latest/matching version
@@ -26,6 +27,7 @@ upgrade: .venv
 		--upgrade \
 		--resolver=backtracking \
 		--output-file requirements/dev.txt \
+		pyproject.toml \
 		requirements/dev.in
 
 
