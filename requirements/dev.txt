@@ -314,9 +314,7 @@ pygments==2.18.0 \
 pylint==3.2.5 \
     --hash=sha256:32cd6c042b5004b8e857d727708720c54a676d1e22917cf1a2df9b4d4868abd6 \
     --hash=sha256:e9b7171e242dcc6ebd0aaa7540481d1a72860748a0a7816b8fe6cf6c80a6fe7e
-    # via
-    #   -r requirements/dev.in
-    #   pylint-pytest (pyproject.toml)
+    # via -r requirements/dev.in
 pyproject-api==1.7.1 \
     --hash=sha256:2dc1654062c2b27733d8fd4cdda672b22fe8741ef1dde8e3a998a9547b071eeb \
     --hash=sha256:7ebc6cd10710f89f4cf2a2731710a98abce37ebff19427116ff2174c9236a827
@@ -327,12 +325,11 @@ pyproject-hooks==1.1.0 \
     # via
     #   build
     #   pip-tools
-pytest==8.2.2 \
-    --hash=sha256:c434598117762e2bd304e526244f67bf66bbd7b5d6cf22138be51ff661980343 \
-    --hash=sha256:de4bb8104e201939ccdc688b27a89a7be2079b22e2bd2b07f806b6ba71117977
+pytest==8.3.2 \
+    --hash=sha256:4ba08f9ae7dcf84ded419494d229b48d0903ea6407b030eaec46df5e6a73bba5 \
+    --hash=sha256:c132345d12ce551242c87269de812483f5bcc87cdbb4722e48487ba194f9fdce
     # via
     #   -r requirements/dev.in
-    #   pylint-pytest (pyproject.toml)
     #   pytest-cov
     #   pytest-pudb
 pytest-cov==5.0.0 \
