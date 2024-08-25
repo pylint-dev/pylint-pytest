@@ -79,7 +79,9 @@ repos:
       - id: mypy
         exclude: tests/input/
         additional_dependencies:
+          - attrs
           - pylint
+          - types-networkx
   - repo: local
     hooks:
       - id: pylint

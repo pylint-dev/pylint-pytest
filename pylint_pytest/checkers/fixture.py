@@ -8,14 +8,14 @@ from pathlib import Path
 import astroid
 import pytest
 
-from ..utils import (
+from ..utils.pytest_logic import (
+    FixtureDict,
     _can_use_fixture,
     _is_pytest_fixture,
     _is_pytest_mark,
     _is_pytest_mark_usefixtures,
 )
 from . import BasePytestChecker
-from .types import FixtureDict
 
 # TODO: support pytest python_files configuration
 FILE_NAME_PATTERNS: tuple[str, ...] = ("test_*.py", "*_test.py")

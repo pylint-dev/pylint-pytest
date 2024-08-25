@@ -6,8 +6,7 @@ from astroid import Arguments, Module, NodeNG
 from pylint.checkers.variables import VariablesChecker
 from pylint.interfaces import Confidence
 
-from pylint_pytest.utils import _can_use_fixture, _is_same_module
-
+from ..utils.pytest_logic import _can_use_fixture, _is_same_module
 from .fixture import FixtureChecker
 
 

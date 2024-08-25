@@ -1,6 +1,6 @@
 from pylint.checkers import BaseChecker
 
-from pylint_pytest.utils import PYLINT_VERSION_MAJOR
+from pylint_pytest.utils.pytest_logic import PYLINT_VERSION_MAJOR
 
 
 class BasePytestChecker(BaseChecker):
