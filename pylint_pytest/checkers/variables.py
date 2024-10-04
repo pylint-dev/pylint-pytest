@@ -12,12 +12,12 @@ from .fixture import FixtureChecker
 
 
 class CustomVariablesChecker(VariablesChecker):
-    """Overrides the default VariablesChecker of pylint to discard unwanted warning messages"""
+    """Overrides the default VariablesChecker of pylint to discard unwanted warning messages."""
 
     # pylint: disable=protected-access
     # this class needs to access the fixture checker registries
 
-    def add_message(
+    def add_message(  # pylint: disable=too-many-positional-arguments # Original Signature
         self,
         msgid: str,
         line: int | None = None,

@@ -166,6 +166,8 @@ ignore = [
 ]
 
 [tool.ruff.lint.pydocstyle]
+# https://github.com/astral-sh/ruff/pull/13286
+# XXX: sphinx??
 convention = "google"
 
 [tool.ruff.lint.extend-per-file-ignores]

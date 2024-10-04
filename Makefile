@@ -1,6 +1,6 @@
 # Use python executables inside venv
 export PATH := .venv/bin:$(PATH)
-export PYTHONPATH=.
+export PYTHONPATH= `pwd`
 
 # creates the venv
 .venv/bin/python3.11:
@@ -8,7 +8,7 @@ export PYTHONPATH=.
 
 # makes sures the venv contains a given version of pip and pip-tools
 .venv: .venv/bin/python3.11
-	pip install --quiet --upgrade 'pip==23.3.1' 'pip-tools==7.3'
+	pip install --quiet --upgrade 'pip==24.2' 'pip-tools==7.4.1'
 
 # generates a lock file with pinned version of all dependencies to be used by the CI and local devs
 requirements/dev.txt: .venv requirements/dev.in
@@ -30,10 +30,9 @@ upgrade: .venv
 		pyproject.toml \
 		requirements/dev.in
 
-
 # creates the venv if not present then install the dependencies, the package and pre-commit
 .PHONY: install
-install: .venv
+install: .venv requirements/dev.txt
 	pip-sync requirements/dev.txt
 	# install pylint_pytest (deps are already handled by the line before)
 	pip install --no-deps -e .
