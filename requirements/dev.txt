@@ -343,9 +343,7 @@ pygments==2.18.0 \
 pylint==3.3.1 \
     --hash=sha256:2f846a466dd023513240bc140ad2dd73bfc080a5d85a710afdb728c420a5a2b9 \
     --hash=sha256:9f3dcc87b1203e612b78d91a896407787e708b3f189b5fa0b307712d49ff0c6e
-    # via
-    #   -r requirements/dev.in
-    #   pylint-pytest (pyproject.toml)
+    # via -r requirements/dev.in
 pyproject-api==1.8.0 \
     --hash=sha256:3d7d347a047afe796fd5d1885b1e391ba29be7169bd2f102fcd378f04273d228 \
     --hash=sha256:77b8049f2feb5d33eefcc21b57f1e279636277a8ac8ad6b5871037b243778496
@@ -361,7 +359,6 @@ pytest==8.3.3 \
     --hash=sha256:a6853c7375b2663155079443d2e45de913a911a11d669df02a50814944db57b2
     # via
     #   -r requirements/dev.in
-    #   pylint-pytest (pyproject.toml)
     #   pytest-cov
     #   pytest-pudb
 pytest-cov==5.0.0 \
@@ -459,9 +456,9 @@ tomlkit==0.13.2 \
     --hash=sha256:7a974427f6e119197f670fbbbeae7bef749a6c14e793db934baefc1b5f03efde \
     --hash=sha256:fff5fe59a87295b278abd31bec92c15d9bc4a06885ab12bcea52c71119392e79
     # via pylint
-tox==4.21.2 \
-    --hash=sha256:13d996adcd792e7c82994b0e116d85efd84f0c6d185254d83d156f73f86b2038 \
-    --hash=sha256:49381ff102296753e378fa5ff30e42a35e695f149b4dbf8a2c49d15fdb5797b2
+tox==4.23.0 \
+    --hash=sha256:46da40afb660e46238c251280eb910bdaf00b390c7557c8e4bb611f422e9db12 \
+    --hash=sha256:a6bd7d54231d755348d3c3a7b450b5bf6563833716d1299a1619587a1b77a3bf
     # via -r requirements/dev.in
 traitlets==5.14.3 \
     --hash=sha256:9ed0579d3502c94b4b3732ac120375cda96f923114522847de4b3bb98b96b6b7 \
