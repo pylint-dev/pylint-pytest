@@ -4,9 +4,9 @@
 #
 #    pip-compile --generate-hashes --max-rounds=20 --output-file=requirements/dev.txt --strip-extras pyproject.toml requirements/dev.in
 #
-astroid==3.3.4 \
-    --hash=sha256:5eba185467253501b62a9f113c263524b4f5d55e1b30456370eed4cdbd6438fd \
-    --hash=sha256:e73d0b62dd680a7c07cb2cd0ce3c22570b044dd01bd994bc3a2dd16c6cbba162
+astroid==3.3.5 \
+    --hash=sha256:5cfc40ae9f68311075d27ef68a4841bdc5cc7f6cf86671b49f00607d30188e2d \
+    --hash=sha256:a9d1c946ada25098d790e079ba2a1b112157278f3fb7e718ae6a9252f5835dc8
     # via pylint
 asttokens==2.4.1 \
     --hash=sha256:051ed49c3dcae8913ea7cd08e46a606dba30b79993209636c4875bc1d637bc24 \
@@ -340,12 +340,10 @@ pygments==2.18.0 \
     # via
     #   ipython
     #   pudb
-pylint==3.3.1 \
-    --hash=sha256:2f846a466dd023513240bc140ad2dd73bfc080a5d85a710afdb728c420a5a2b9 \
-    --hash=sha256:9f3dcc87b1203e612b78d91a896407787e708b3f189b5fa0b307712d49ff0c6e
-    # via
-    #   -r requirements/dev.in
-    #   pylint-pytest (pyproject.toml)
+pylint==3.3.2 \
+    --hash=sha256:77f068c287d49b8683cd7c6e624243c74f92890f767f106ffa1ddf3c0a54cb7a \
+    --hash=sha256:9ec054ec992cd05ad30a6df1676229739a73f8feeabf3912c995d17601052b01
+    # via -r requirements/dev.in
 pyproject-api==1.8.0 \
     --hash=sha256:3d7d347a047afe796fd5d1885b1e391ba29be7169bd2f102fcd378f04273d228 \
     --hash=sha256:77b8049f2feb5d33eefcc21b57f1e279636277a8ac8ad6b5871037b243778496
@@ -361,7 +359,6 @@ pytest==8.3.3 \
     --hash=sha256:a6853c7375b2663155079443d2e45de913a911a11d669df02a50814944db57b2
     # via
     #   -r requirements/dev.in
-    #   pylint-pytest (pyproject.toml)
     #   pytest-cov
     #   pytest-pudb
 pytest-cov==5.0.0 \
