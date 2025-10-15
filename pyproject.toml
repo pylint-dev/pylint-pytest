@@ -41,7 +41,7 @@ keywords = [
 
 requires-python = ">=3.8"
 dependencies = [
-    "pylint>=2,<4",
+    "pylint >=2, <5",
     "pytest>=4.6",
 ]
 
