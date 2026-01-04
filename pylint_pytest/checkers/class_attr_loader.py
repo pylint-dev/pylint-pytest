@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from astroid import Assign, Attribute, ClassDef, Name
+from astroid.nodes import Assign, Attribute, ClassDef, Name
 
 from ..utils import _can_use_fixture, _is_class_autouse_fixture
 from . import BasePytestChecker
@@ -33,7 +33,7 @@ class ClassAttrLoader(BasePytestChecker):
             and node.value.expr.name == "request"
         ):
             # storing the aliases for cls from request.cls
-            self.request_cls = set(t.name for t in node.targets)
+            self.request_cls = {t.name for t in node.targets}
 
     def visit_assignattr(self, node):
         if (
