@@ -28,7 +28,7 @@ Requirements:
 To install:
 
 ```bash
-$ pip install pylint-pytest
+pip install pylint-pytest
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ $ pip install pylint-pytest
 Enable via command line option `--load-plugins`
 
 ```bash
-$ pylint --load-plugins pylint_pytest <path_to_your_sources>
+pylint --load-plugins pylint_pytest <path_to_your_sources>
 ```
 
 Or in `.pylintrc`:
