@@ -20,11 +20,11 @@ jobs:
           - windows-latest
           - macos-latest
         python-version:
-          - '3.8'
-          - '3.9'
           - '3.10'
           - '3.11'
           - '3.12'
+          - '3.13'
+          - '3.14'
 
     defaults:
       run:
@@ -62,11 +62,11 @@ jobs:
         run: tox --skip-missing-interpreters=true
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        if: ${{ !cancelled() }}
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
           flags: ${{ matrix.os }},${{ matrix.python-version }}
-          fail_ci_if_error: ${{ github.repository_owner == 'pylint-dev' && 'true' || 'false' }}
+          fail_ci_if_error: true
           files: test_artifacts/cobertura.xml
 
       - name: Create artifacts

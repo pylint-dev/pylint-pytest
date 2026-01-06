@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [2.0.0a1] - _tbd; started 2025-10-17_
+
+A small pylint update lead into a full-blown dependency updates.
+
+That, additionally, lead to deprecating Python 3.8 and 3.9 support.
+_Technically_, as of writing this, https://devguide.python.org/versions/ does NOT show 3.9 as deprecated.
+However, many dependencies have already dropped support for them - and, according to the page, 3.9's deprecation date 2025-10.
+
+### Development details / information
+
+The project will _soon_ ™️ migrate to `uv` for anything related to packaging, testing, and building:
+https://github.com/pylint-dev/pylint-pytest/issues/132
+
 ## [2.0.0a0] - 2024-02-02
 
 ### Added

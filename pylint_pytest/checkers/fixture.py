@@ -130,7 +130,7 @@ class FixtureChecker(BasePytestChecker):
 
                 FixtureChecker._pytest_fixtures = fixture_collector.fixtures
 
-                legitimate_failure_paths = set(
+                legitimate_failure_paths = {
                     collection_report.nodeid
                     for collection_report in fixture_collector.errors
                     if any(
@@ -140,7 +140,7 @@ class FixtureChecker(BasePytestChecker):
                         )
                         for pattern in FILE_NAME_PATTERNS
                     )
-                )
+                }
                 if (ret != pytest.ExitCode.OK or legitimate_failure_paths) and is_test_module:
                     files_to_report = {
                         str(Path(x).absolute().relative_to(Path.cwd()))

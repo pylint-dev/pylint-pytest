@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pylint-pytest"
-version = "2.0.0a0"
+version = "2.0.0a1"
 license = {file = "LICENSE"}
 description = "A Pylint plugin to suppress pytest-related false positives."
 
@@ -24,11 +24,11 @@ classifiers = [
     "Topic :: Software Development :: Quality Assurance",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Operating System :: OS Independent",
     "License :: OSI Approved :: MIT License",
@@ -39,9 +39,9 @@ keywords = [
     "plugin",
 ]
 
-requires-python = ">=3.8"
+requires-python = ">= 3.10"
 dependencies = [
-    "pylint>=2,<4",
+    "pylint >=2, <5",
     "pytest>=4.6",
 ]
 
@@ -106,7 +106,7 @@ paths.source = [
 profile = "black"
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.10"
 check_untyped_defs = true
 explicit_package_bases = true
 namespace_packages = true
@@ -147,8 +147,6 @@ fix = true
 # ruff is less lenient than pylint and does not make any exceptions
 # (for docstrings, strings and comments in particular).
 line-length = 100
-
-target-version = "py38"
 
 [tool.ruff.lint]
 select = [

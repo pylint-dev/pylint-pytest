@@ -1,5 +1,4 @@
-# For linting purposes, only pylint>3 is supported
-pylint>=3
+pylint>=4
 
 # to handle dependencies
 pip-tools

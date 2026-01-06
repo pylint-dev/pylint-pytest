@@ -28,7 +28,7 @@ Requirements:
 To install:
 
 ```bash
-$ pip install pylint-pytest
+pip install pylint-pytest
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ $ pip install pylint-pytest
 Enable via command line option `--load-plugins`
 
 ```bash
-$ pylint --load-plugins pylint_pytest <path_to_your_sources>
+pylint --load-plugins pylint_pytest <path_to_your_sources>
 ```
 
 Or in `.pylintrc`:
@@ -67,8 +67,7 @@ from fixture_collections import (
 )  # <- Unused imported_fixture imported from fixture_collections
 
 
-def test_something(imported_fixture):
-    ...
+def test_something(imported_fixture): ...
 ```
 
 ### `redefined-outer-name`
@@ -130,16 +129,14 @@ import pytest
 
 
 @pytest.fixture
-def awesome_fixture():
-    ...
+def awesome_fixture(): ...
 
 
 @pytest.fixture
 @pytest.mark.usefixtures(
     "awesome_fixture"
 )  # <- Using useless `@pytest.mark.*` decorator for fixtures
-def another_awesome_fixture():
-    ...
+def another_awesome_fixture(): ...
 ```
 
 ### W6403 `deprecated-positional-argument-for-pytest-fixture`
@@ -151,8 +148,7 @@ import pytest
 
 
 @pytest.fixture("module")  # <- Using a deprecated positional arguments for fixture
-def awesome_fixture():
-    ...
+def awesome_fixture(): ...
 ```
 
 ### F6401 `cannot-enumerate-pytest-fixtures`

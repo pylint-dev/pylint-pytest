@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from astroid import Arguments, Module, NodeNG
+from astroid.nodes import Arguments, Module, NodeNG
 from pylint.checkers.variables import VariablesChecker
 from pylint.interfaces import Confidence
 
