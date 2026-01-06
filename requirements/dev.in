@@ -9,6 +9,7 @@ black
 ruff
 mypy
 pre-commit
+pyupgrade
 
 # mypy plugins
 types-networkx

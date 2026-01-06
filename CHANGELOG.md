@@ -2,13 +2,15 @@
 
 ## [Unreleased]
 
-## [2.0.0a1] - _tbd; started 2025-10-17_
+## [2.0.0a1] - 2026-01-07
 
 A small pylint update lead into a full-blown dependency updates.
 
 That, additionally, lead to deprecating Python 3.8 and 3.9 support.
 _Technically_, as of writing this, https://devguide.python.org/versions/ does NOT show 3.9 as deprecated.
-However, many dependencies have already dropped support for them - and, according to the page, 3.9's deprecation date 2025-10.
+However, many dependencies have already dropped support for them - and, according to the page, 3.9's deprecation date is 2025-10.
+
+In the meantime, do some minor CI improvements, and introduce `pyupgrade` for automatic code modernization.
 
 ### Development details / information
 
