@@ -39,7 +39,7 @@ keywords = [
     "plugin",
 ]
 
-requires-python = ">=3.10"
+requires-python = ">= 3.10"
 dependencies = [
     "pylint >=2, <5",
     "pytest>=4.6",
@@ -147,8 +147,6 @@ fix = true
 # ruff is less lenient than pylint and does not make any exceptions
 # (for docstrings, strings and comments in particular).
 line-length = 100
-
-target-version = "py310"
 
 [tool.ruff.lint]
 select = [
