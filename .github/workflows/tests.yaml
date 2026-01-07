@@ -9,6 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -58,7 +61,7 @@ jobs:
       - name: Test with tox
         env:
           FORCE_COLOR: 1
-          PYTEST_CI_ARGS: --cov-report=xml --junitxml=test_artifacts/test_report.xml --color=yes
+          PYTEST_CI_ARGS: --junitxml=test_artifacts/test_report.xml --color=yes
         run: tox --skip-missing-interpreters=true
 
       - name: Upload coverage reports to Codecov
