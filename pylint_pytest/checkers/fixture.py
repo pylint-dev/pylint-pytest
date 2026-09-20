@@ -26,9 +26,10 @@ ARGUMENT_ARE_KEYWORD_ONLY = (
 
 
 class FixtureCollector:
-    # Same as ``_pytest.fixtures.FixtureManager._arg2fixturedefs``.
-    fixtures: FixtureDict = {}
-    errors: Set[pytest.CollectReport] = set()
+    def __init__(self):
+        # Same as ``_pytest.fixtures.FixtureManager._arg2fixturedefs``.
+        self.fixtures: FixtureDict = {}
+        self.errors: Set[pytest.CollectReport] = set()
 
     def pytest_sessionfinish(self, session):
         # pylint: disable=protected-access
