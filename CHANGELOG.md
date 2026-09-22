@@ -2,6 +2,31 @@
 
 ## [Unreleased]
 
+## [1.1.9] - 2026-09-29
+
+This release fixes the actual bug behind https://github.com/pylint-dev/pylint-pytest/issues/67
+(same as https://github.com/pylint-dev/pylint-pytest/issues/68, which includes internal reproduction).
+In light of this, the `pytest<=8.2.0` stop-gap from 1.1.8 is no longer needed.
+
+As a last commit to the (severely outdated) `maint/1.1.x` version, we also fix a typing issue.
+
+### Fixed
+
+* Nonsensical `cannot-enumerate-pytest-fixtures` error (https://github.com/pylint-dev/pylint-pytest/issues/68)
+* Directory src/scriv used to be processed, now: command not found (https://github.com/pylint-dev/pylint-pytest/issues/67)
+  Removed the `pytest<=8.2.0` cap added; as the https://github.com/pylint-dev/pylint-pytest/issues/68 resolution fixed the underlying issue
+* Missing pytest.CollectReport when invoking pylint with plugin enabled (https://github.com/pylint-dev/pylint-pytest/issues/45)
+
+### Changed
+
+* CI: Python 3.6/3.7 tests are executable again, one last time:
+  * `ubuntu-latest` no longer provides Python 3.6/3.7 (and GitHub has retired the `ubuntu-20.04` runners too)
+  * Each job now runs only the tox environments matching its Python version.
+    tox factor filters (a tox v4 feature) cannot be used, since Python 3.6 is limited to tox 3.28.0
+    * This also requires `bash`, so `shell:` for every OS is changed to `bash`
+      (also obsoleting any Windows/PowerShell-specific steps)
+  * Bumped `actions/upload-artifact` from v3 to v4 (as v3 was retired 2025-01-30)
+
 ## [1.1.8] - 2024-05-23
 
 This is a small release to block updating to `pytest>8.2.0`, as it causes an error (https://github.com/pylint-dev/pylint-pytest/issues/67)

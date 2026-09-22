@@ -11,7 +11,7 @@ with open(path.join(here, "README.md")) as fin:
 
 setup(
     name="pylint-pytest",
-    version="1.1.8",
+    version="1.1.9",
     author="Stavros Ntentos",
     author_email="133706+stdedos@users.noreply.github.com",
     license="MIT",
@@ -29,7 +29,7 @@ setup(
     packages=find_packages(exclude=["tests*", "sandbox"]),
     install_requires=[
         "pylint>=2",
-        "pytest>=4.6,<=8.2.0",
+        "pytest>=4.6",
     ],
     python_requires=">=3.6",
     classifiers=[
