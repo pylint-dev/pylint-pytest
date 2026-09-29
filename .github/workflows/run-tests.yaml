@@ -27,29 +27,36 @@ jobs:
           - '3.10'
           - '3.11'
           # - '3.12'  # FixMe: https://github.com/pylint-dev/pylint-pytest/issues/3
-        # Python 3.6 is not available in `ubuntu-latest`.
         exclude:
+          # Too old Pythons for `ubuntu-latest`
           - python-version: '3.6'
             os: ubuntu-latest
-        include:
+          - python-version: '3.7'
+            os: ubuntu-latest
+          # Too old Pythons for `macos-latest` aka arm64
           - python-version: '3.6'
-            os: ubuntu-20.04
+            os: macos-latest
+          - python-version: '3.7'
+            os: macos-latest
+        include:
+          # Github does not provide `ubuntu-20.04` anymore
+          # - python-version: '3.6'
+          #   os: ubuntu-20.04
+          - python-version: '3.7'
+            os: ubuntu-22.04
+          - python-version: '3.6'
+            os: macos-15-intel
+          - python-version: '3.7'
+            os: macos-15-intel
 
     defaults:
       run:
-        shell: ${{ matrix.os == 'windows-latest' && 'pwsh' || '/bin/bash --noprofile --norc -Eeuxo pipefail {0}' }}
+        shell: 'bash --noprofile --norc -Eeuxo pipefail {0}'
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Slugify GITHUB_REPOSITORY (win)
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          $slug = $env:GITHUB_REPOSITORY -replace '/', '_'
-          echo "GITHUB_REPOSITORY_SLUG=$slug" | tee -Append $env:GITHUB_ENV
-
-      - name: Slugify GITHUB_REPOSITORY (non-win)
-        if: ${{ matrix.os != 'windows-latest' }}
+      - name: Slugify GITHUB_REPOSITORY
         run: echo "GITHUB_REPOSITORY_SLUG=${GITHUB_REPOSITORY////_}" >> $GITHUB_ENV
 
       - name: Set up Python ${{ matrix.python-version }}
@@ -68,7 +75,9 @@ jobs:
         env:
           FORCE_COLOR: 1
           PYTEST_CI_ARGS: --cov-report=xml --junitxml=test_artifacts/test_report.xml --color=yes
-        run: tox ${{ matrix.python-version == '3.6' && '--skip-missing-interpreters=true' || '' }}
+        run: |
+          py=py$(echo '${{ matrix.python-version }}' | tr -d .)
+          tox -e "$(tox -l | grep "^${py}-" | paste -sd, -)"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
