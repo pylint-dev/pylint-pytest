@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [1.1.9] - 2026-09-29
+## [1.1.9.post1] - 2026-09-29
 
 This release fixes the actual bug behind https://github.com/pylint-dev/pylint-pytest/issues/67
 (same as https://github.com/pylint-dev/pylint-pytest/issues/68, which includes internal reproduction).
