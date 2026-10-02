@@ -8,6 +8,7 @@
   `pre-commit` hooks, and the pinned development dependencies.
 * Removed the unmaintained `pytest-pudb`, which is incompatible with pytest >= 9.1.
 * Temporarily test against pylint < 4.1, which crashes the plugin.
+* The version is now taken from the git tag (`setuptools-scm`): releasing is just publishing a `v*` GitHub release.
 
 ## [2.0.0a1] - 2026-01-07
 

@@ -1,1 +1,7 @@
 prune tests/
+# setuptools-scm adds every git-tracked file to the sdist; keep it as lean as before
+prune .github/
+prune requirements/
+prune sandbox/
+exclude .codecov.yml .git-blame-ignore-revs .gitignore .pre-commit-config.yaml
+exclude CHANGELOG.md Makefile tox.ini
