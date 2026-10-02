@@ -1,4 +1,4 @@
-pylint>=4
+pylint>=4,<4.1  # 4.1 crashes the plugin, fixed in a follow-up
 
 # to handle dependencies
 pip-tools
@@ -18,6 +18,5 @@ types-networkx
 tox
 pytest
 pytest-cov
-pytest-pudb
 # pytest-pycharm # It is a bit unstable: https://github.com/jlubcke/pytest-pycharm/issues/13
 ipython
