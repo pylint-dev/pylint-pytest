@@ -84,7 +84,7 @@ repos:
       - id: mypy
         exclude: tests/input/
         additional_dependencies:
-          - pylint<4.1  # 4.1 crashes the plugin, fixed in a follow-up
+          - pylint
   - repo: local
     hooks:
       - id: pylint
