@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+### Development details / information
+
+* Upgraded GitHub Actions (fixes the Codecov upload, which failed GPG verification with `codecov-action` v5.5.2),
+  `pre-commit` hooks, and the pinned development dependencies.
+* Removed the unmaintained `pytest-pudb`, which is incompatible with pytest >= 9.1.
+* Temporarily test against pylint < 4.1, which crashes the plugin.
+
 ## [2.0.0a1] - 2026-01-07
 
 A small pylint update lead into a full-blown dependency updates.

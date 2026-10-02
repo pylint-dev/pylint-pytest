@@ -31,7 +31,7 @@ jobs:
         shell: ${{ matrix.os == 'windows-latest' && 'pwsh' || '/bin/bash --noprofile --norc -Eeuxo pipefail {0}' }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Slugify GITHUB_REPOSITORY (win)
         if: ${{ matrix.os == 'windows-latest' }}
@@ -44,7 +44,7 @@ jobs:
         run: echo "GITHUB_REPOSITORY_SLUG=${GITHUB_REPOSITORY////_}" >> $GITHUB_ENV
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -62,7 +62,7 @@ jobs:
         run: tox --skip-missing-interpreters=true
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         if: ${{ !cancelled() }}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -71,7 +71,7 @@ jobs:
           files: test_artifacts/cobertura.xml
 
       - name: Create artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: ${{ !cancelled() }}
         with:
           name: ${{ env.GITHUB_REPOSITORY_SLUG }}_test-artifacts_${{ github.event_name }}_${{ github.event.pull_request.number || github.sha }}_${{ matrix.os
