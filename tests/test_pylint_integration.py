@@ -7,7 +7,25 @@ Notes:
     that pylint_pytest integrates just fine
 """
 
+import re
 import subprocess
+
+from pylint_pytest.utils import PYLINT_VERSION_MAJOR
+
+# astroid 2.x (pylint 2.x) sometimes prints this when a generator is garbage collected.
+# It is harmless, unrelated to pylint_pytest, and will not be fixed upstream anymore.
+ASTROID_2_GENERATOR_NOISE = re.compile(
+    rb"Exception ignored in: <generator object \w+ at 0x[0-9a-fA-F]+>\r?\n"
+    rb"Traceback \(most recent call last\):\r?\n"
+    rb"(?:  .*\r?\n)*"
+    rb"ValueError: generator already executing\r?\n"
+)
+
+
+def _errors(stderr: bytes) -> bytes:
+    if PYLINT_VERSION_MAJOR == 2:
+        return ASTROID_2_GENERATOR_NOISE.sub(b"", stderr)
+    return stderr
 
 
 def test_simple_process():
@@ -17,7 +35,7 @@ def test_simple_process():
         check=False,
     )
     # then no error
-    assert not result.stderr
+    assert not _errors(result.stderr)
 
 
 def test_multi_process():
@@ -27,4 +45,4 @@ def test_multi_process():
         check=False,
     )
     # then no error
-    assert not result.stderr
+    assert not _errors(result.stderr)
