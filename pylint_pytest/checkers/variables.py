@@ -4,7 +4,7 @@ from typing import Any
 
 from astroid.nodes import Arguments, Module, NodeNG
 from pylint.checkers.variables import VariablesChecker
-from pylint.interfaces import Confidence
+from pylint.interfaces import UNDEFINED, Confidence
 
 from pylint_pytest.utils import _can_use_fixture, _is_same_module
 
@@ -23,7 +23,7 @@ class CustomVariablesChecker(VariablesChecker):
         line: int | None = None,
         node: NodeNG | None = None,
         args: Any = None,
-        confidence: Confidence | None = None,
+        confidence: Confidence = UNDEFINED,
         col_offset: int | None = None,
         end_lineno: int | None = None,
         end_col_offset: int | None = None,
@@ -105,4 +105,6 @@ class CustomVariablesChecker(VariablesChecker):
         ):
             return
 
-        super().add_message(msgid, line, node, args, confidence, col_offset)
+        super().add_message(
+            msgid, line, node, args, confidence, col_offset, end_lineno, end_col_offset
+        )

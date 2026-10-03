@@ -1,4 +1,4 @@
-pylint>=4,<4.1  # 4.1 crashes the plugin, fixed in a follow-up
+pylint>=4
 
 # to handle dependencies
 pip-tools

@@ -2,12 +2,18 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Crash (`AttributeError: 'NoneType' object has no attribute 'name'`) with pylint >= 4.1,
+  caused by `CustomVariablesChecker.add_message` defaulting `confidence` to `None`.
+  `end_lineno` and `end_col_offset` are now also forwarded to pylint instead of being dropped.
+
 ### Development details / information
 
 * Upgraded GitHub Actions (fixes the Codecov upload, which failed GPG verification with `codecov-action` v5.5.2),
   `pre-commit` hooks, and the pinned development dependencies.
 * Removed the unmaintained `pytest-pudb`, which is incompatible with pytest >= 9.1.
-* Temporarily test against pylint < 4.1, which crashes the plugin.
+
 
 ## [2.0.0a1] - 2026-01-07
 
