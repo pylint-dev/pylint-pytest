@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "setuptools.build_meta"
-requires = [ "setuptools>=66.1" ]
+requires = [ "setuptools>=77" ]
 
 [project]
 name = "pylint-pytest"
@@ -12,7 +12,8 @@ keywords = [
   "pylint",
   "pytest",
 ]
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = [ "LICENSE" ]
 maintainers = [
   { name = "Stavros Ntentos", email = "133706+stdedos@users.noreply.github.com" },
   { name = "Pierre Sassoulas", email = "pierre.sassoulas@gmail.com" },
@@ -24,7 +25,6 @@ requires-python = ">=3.10"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3 :: Only",
@@ -54,7 +54,6 @@ packages.find.exclude = [
   "sandbox",
   "tests*",
 ]
-license-files = [ "LICENSE" ]
 
 [tool.ruff]
 # ruff is less lenient than pylint and does not make any exceptions
