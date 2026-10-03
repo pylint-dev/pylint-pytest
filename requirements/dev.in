@@ -5,11 +5,9 @@ pip-tools
 wheel
 
 # to run linters and formatters at commit time and CI
-black
 ruff
 mypy
 pre-commit
-pyupgrade
 
 # mypy plugins
 types-networkx
