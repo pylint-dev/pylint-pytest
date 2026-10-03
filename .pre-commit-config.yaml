@@ -34,10 +34,10 @@ repos:
           - '4'
           - --offset
           - '2'
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.30.0
     hooks:
-      - id: pyupgrade
+      - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.10
     hooks:
@@ -46,10 +46,6 @@ repos:
         args:
           - --fix
         exclude: tests/input/
-  - repo: https://github.com/psf/black
-    rev: 26.5.1
-    hooks:
-      - id: black
   - repo: https://github.com/asottile/blacken-docs
     rev: 1.20.0
     hooks:

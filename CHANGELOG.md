@@ -13,6 +13,9 @@
 * Upgraded GitHub Actions (fixes the Codecov upload, which failed GPG verification with `codecov-action` v5.5.2),
   `pre-commit` hooks, and the pinned development dependencies.
 * Removed the unmaintained `pytest-pudb`, which is incompatible with pytest >= 9.1.
+* Replaced `black` and `pyupgrade` with `ruff`, enabled more `ruff` rule families,
+  and formatted `pyproject.toml` with `pyproject-fmt` (#40).
+* Removed the placeholder `setup.py`, and switched to a SPDX license expression.
 
 
 ## [2.0.0a1] - 2026-01-07

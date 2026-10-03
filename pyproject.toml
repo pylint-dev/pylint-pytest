@@ -1,250 +1,222 @@
 [build-system]
-requires = ["setuptools>=66.1"]
 build-backend = "setuptools.build_meta"
+requires = [ "setuptools>=77" ]
 
 [project]
 name = "pylint-pytest"
 version = "2.0.0a1"
-license = {file = "LICENSE"}
 description = "A Pylint plugin to suppress pytest-related false positives."
-
-authors = [
-    {name = "Reverb Chu"},
-]
-maintainers = [
-    {name = "Stavros Ntentos", email = "133706+stdedos@users.noreply.github.com"},
-    {name = "Pierre Sassoulas", email = "pierre.sassoulas@gmail.com"},
-]
-
 readme = "README.md"
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "Topic :: Software Development :: Testing",
-    "Topic :: Software Development :: Quality Assurance",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Operating System :: OS Independent",
-    "License :: OSI Approved :: MIT License",
-]
 keywords = [
-    "pylint",
-    "pytest",
-    "plugin",
+  "plugin",
+  "pylint",
+  "pytest",
 ]
-
-requires-python = ">= 3.10"
-dependencies = [
-    "pylint >=2, <5",
-    "pytest>=4.6",
+license = "MIT"
+license-files = [ "LICENSE" ]
+maintainers = [
+  { name = "Stavros Ntentos", email = "133706+stdedos@users.noreply.github.com" },
+  { name = "Pierre Sassoulas", email = "pierre.sassoulas@gmail.com" },
 ]
-
+authors = [
+  { name = "Reverb Chu" },
+]
+requires-python = ">=3.10"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Software Development :: Testing",
+]
 # [project.optional-dependencies] moved to requirements/dev.in
-
-[project.urls]
-Changelog = "https://github.com/pylint-dev/pylint-pytest/blob/master/CHANGELOG.md"
-Documentation = "https://github.com/pylint-dev/pylint-pytest#readme"
-Homepage = "https://github.com/pylint-dev/pylint-pytest"
-Source = "https://github.com/pylint-dev/pylint-pytest"
-Tracker = "https://github.com/pylint-dev/pylint-pytest/issues"
-"Say Thanks!" = "https://saythanks.io/to/stdedos"
+dependencies = [
+  "pylint>=2,<5",
+  "pytest>=4.6",
+]
+urls."Say Thanks!" = "https://saythanks.io/to/stdedos"
+urls.Changelog = "https://github.com/pylint-dev/pylint-pytest/blob/master/CHANGELOG.md"
+urls.Documentation = "https://github.com/pylint-dev/pylint-pytest#readme"
+urls.Homepage = "https://github.com/pylint-dev/pylint-pytest"
+urls.Source = "https://github.com/pylint-dev/pylint-pytest"
+urls.Tracker = "https://github.com/pylint-dev/pylint-pytest/issues"
 
 [tool.setuptools]
-license-files = ["LICENSE"]
-
-[tool.setuptools.packages.find]
-exclude = [
-    "tests*",
-    "sandbox",
+packages.find.exclude = [
+  "sandbox",
+  "tests*",
 ]
 
-[tool.aliases]
-test = "pytest"
-
-[tool.black]
+[tool.ruff]
+# ruff is less lenient than pylint and does not make any exceptions
+# (for docstrings, strings and comments in particular).
 line-length = 100
-
-[tool.coverage]
-run.branch = true
-run.data_file = "test_artifacts/.coverage"
-xml.output = "test_artifacts/cobertura.xml"
-html.directory = "test_artifacts/htmlcov"
-report.exclude_lines = [
-    # Have to re-enable the standard pragma
-    'pragma: no cover',
-    # Don't complain about missing debug-only code:
-    'def __repr__',
-    'if self\.debug',
-    'if settings.DEBUG',
-    # Don't complain if tests don't hit defensive assertion code:
-    'raise AssertionError',
-    'raise NotImplementedError',
-    # Don't complain if non-runnable code isn't run:
-    'if 0:',
-    'if __name__ == .__main__.:',
-    # Don't complain about abstract methods, they aren't run:
-    '@(abc\.)?abstractmethod',
-    'class .*\bProtocol\):',
-    # Defaults must be re-listed; we cannot `extend_exclude_lines` #
-    # ------------------------------------------------------------ #
-    # Ignore type-checking blocks
-    'if TYPE_CHECKING:',
-    # Defensive programming does not need to be covered
-    'raise UnreachableCodeException',
+fix = true
+lint.select = [
+  "B",   # bugbear
+  "C4",  # flake8-comprehensions
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "I",   # isort
+  "PIE", # flake8-pie
+  "PT",  # flake8-pytest-style
+  "PTH", # flake8-pathlib
+  "RET", # flake8-return
+  "RUF", # ruff
+  "UP",  # pyupgrade
+  "W",   # pycodestyle
 ]
-paths.source = [
-    "pylint_pytest/",
+lint.ignore = [
+  "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
 ]
+lint.extend-per-file-ignores."tests/**/*_test.py" = [
+  "FBT",     # Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
+  "PLR2004", # (debateable) Magic value used in comparison
+  "S101",    # pytest works with `assert`s
+  "S311",    # (debateable) Standard pseudo-random generators are not suitable for cryptographic purposes
+]
+lint.extend-per-file-ignores."tests/**/test_*.py" = [
+  "FBT",     # Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
+  "PLR2004", # (debateable) Magic value used in comparison
+  "S101",    # pytest works with `assert`s
+  "S311",    # (debateable) Standard pseudo-random generators are not suitable for cryptographic purposes
+]
+# https://github.com/astral-sh/ruff/pull/13286
+# XXX: sphinx??
+lint.pydocstyle.convention = "google"
 
-[tool.isort]
-profile = "black"
+[tool.pylint]
+reports.output-format = "colorized"
+design.max-args = 7
+variables.ignored-argument-names = "_.*"
+"messages control".enable = [
+  "use-implicit-booleaness-not-comparison-to-string",
+  "use-implicit-booleaness-not-comparison-to-zero",
+  "useless-suppression",
+]
+disable = [
+  "attribute-defined-outside-init",   # Temporary
+  "cannot-enumerate-pytest-fixtures", # Temporary; ToDo: Our own message, fix first
+  "confusing-consecutive-elif",       # Temporary
+  "docstring-first-line-empty",       # C0199; not-an-issue
+  "duplicate-code",                   # Temporary
+  "fixme",                            # Temporary; needs-work, and probably regex
+  "missing-docstring",                # Temporary
+  "redefined-loop-name",              # Temporary
+  "too-complex",                      # Temporary
+  "too-many-arguments",               # Temporary
+  "too-many-nested-blocks",           # Temporary
+  "too-many-try-statements",          # Temporary
+  "unspecified-encoding",             # Temporary
+  "use-maxsplit-arg",                 # Temporary
+  "used-before-assignment",           # Temporary
+]
+ignore-paths = "tests/input"  # Ignore test inputs
+load-plugins = [
+  "pylint_pytest",
+  "pylint.extensions.bad_builtin",
+  "pylint.extensions.broad_try_clause",
+  "pylint.extensions.check_elif",
+  "pylint.extensions.code_style",
+  "pylint.extensions.comparison_placement",
+  "pylint.extensions.confusing_elif",
+  # "pylint.extensions.consider_ternary_expression", # Not a pretty refactoring
+  "pylint.extensions.docparams",
+  "pylint.extensions.docstyle",
+  "pylint.extensions.eq_without_hash",
+  "pylint.extensions.for_any_all",
+  "pylint.extensions.mccabe",
+  "pylint.extensions.no_self_use",
+  "pylint.extensions.overlapping_exceptions",
+  "pylint.extensions.redefined_loop_name",
+  "pylint.extensions.redefined_variable_type",
+  "pylint.extensions.typing",
+  "pylint.extensions.dict_init_mutate",
+  "pylint.extensions.dunder",
+  # "pylint.extensions.while_used",  # highly opinionated
+  # "pylint.extensions.magic_value",  # highly opinionated
+]
+py-version = "3.8"
+
+[tool.pyproject-fmt]
+max_supported_python = "3.14"
 
 [tool.mypy]
+exclude = [
+  "^.cache",       # Ignore CI-defined .cache
+  "^.tox",         # Ignore tox virtualenvs
+  "^.venv",        # Ignore installed packages
+  "^build/",       # Ignore build inputs
+  "^dist/",        # Ignore build inputs
+  "^tests/input/", # Ignore test inputs
+]
+namespace_packages = true
+explicit_package_bases = true
 python_version = "3.10"
 check_untyped_defs = true
-explicit_package_bases = true
-namespace_packages = true
-show_error_codes = true
 strict_optional = true
 warn_redundant_casts = true
+warn_unused_ignores = true
 warn_unreachable = true
 warn_unused_configs = true
-warn_unused_ignores = true
-exclude = [
-    "^.venv",       # Ignore installed packages
-    "^.tox",        # Ignore tox virtualenvs
-    "^.cache",      # Ignore CI-defined .cache
-    "^tests/input/", # Ignore test inputs
-    "^build/",      # Ignore build inputs
-    "^dist/",       # Ignore build inputs
-]
+show_error_codes = true
 
 [[tool.mypy.overrides]]
 module = [
-    "astroid",
-    "pylint.*",
-    "setuptools",
+  "astroid",
+  "pylint.*",
+  "setuptools",
 ]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = [
-    "tests.*",
+  "tests.*",
 ]
 check_untyped_defs = true
 
-[tool.pytest.ini_options]
-addopts = "--verbose --cov-config=pyproject.toml --cov-report=html"
+[tool.pytest]
+ini_options.addopts = "--verbose --cov-config=pyproject.toml --cov-report=html"
 
-[tool.ruff]
-fix = true
-# ruff is less lenient than pylint and does not make any exceptions
-# (for docstrings, strings and comments in particular).
-line-length = 100
-
-[tool.ruff.lint]
-select = [
-    "E",  # pycodestyle
-    "F",  # pyflakes
-    "W",  # pycodestyle
-    "B",  # bugbear
-    "I",  # isort
-    "RUF", # ruff
-    "UP", # pyupgrade
+[tool.coverage]
+run.branch = true
+run.data_file = "test_artifacts/.coverage"
+paths.source = [
+  "pylint_pytest/",
 ]
-
-ignore = [
-    "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
+report.exclude_lines = [
+  # Don't complain about abstract methods, they aren't run:
+  '@(abc\.)?abstractmethod',
+  'class .*\bProtocol\):',
+  # Don't complain about missing debug-only code:
+  "def __repr__",
+  "if __name__ == .__main__.:",
+  # Don't complain if non-runnable code isn't run:
+  "if 0:",
+  'if self\.debug',
+  "if settings.DEBUG",
+  # Defaults must be re-listed; we cannot `extend_exclude_lines` #
+  # ------------------------------------------------------------ #
+  # Ignore type-checking blocks
+  "if TYPE_CHECKING:",
+  # Have to re-enable the standard pragma
+  "pragma: no cover",
+  # Don't complain if tests don't hit defensive assertion code:
+  "raise AssertionError",
+  "raise NotImplementedError",
+  # Defensive programming does not need to be covered
+  "raise UnreachableCodeException",
 ]
+html.directory = "test_artifacts/htmlcov"
+xml.output = "test_artifacts/cobertura.xml"
 
-[tool.ruff.lint.pydocstyle]
-# https://github.com/astral-sh/ruff/pull/13286
-# XXX: sphinx??
-convention = "google"
-
-[tool.ruff.lint.extend-per-file-ignores]
-"tests/**/test_*.py" = [
-    "S101", # pytest works with `assert`s
-    "FBT", # Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
-    # The below are debateable
-    "S311", # Standard pseudo-random generators are not suitable for cryptographic purposes
-    "PLR2004", # Magic value used in comparison
-]
-"tests/**/*_test.py" = [
-    "S101", # pytest works with `assert`s
-    "FBT", # Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
-    # The below are debateable
-    "S311", # Standard pseudo-random generators are not suitable for cryptographic purposes
-    "PLR2004", # Magic value used in comparison
-]
-
-[tool.pylint]
-py-version = "3.8"
-
-ignore-paths="tests/input" # Ignore test inputs
-
-load-plugins= [
-    "pylint_pytest",
-    "pylint.extensions.bad_builtin",
-    "pylint.extensions.broad_try_clause",
-    "pylint.extensions.check_elif",
-    "pylint.extensions.code_style",
-    "pylint.extensions.comparison_placement",
-    "pylint.extensions.confusing_elif",
-    # "pylint.extensions.consider_ternary_expression", # Not a pretty refactoring
-    "pylint.extensions.docparams",
-    "pylint.extensions.docstyle",
-    "pylint.extensions.eq_without_hash",
-    "pylint.extensions.for_any_all",
-    "pylint.extensions.mccabe",
-    "pylint.extensions.no_self_use",
-    "pylint.extensions.overlapping_exceptions",
-    "pylint.extensions.redefined_loop_name",
-    "pylint.extensions.redefined_variable_type",
-    "pylint.extensions.typing",
-    # "pylint.extensions.while_used",  # highly opinionated
-    "pylint.extensions.dict_init_mutate",
-    "pylint.extensions.dunder",
-    # "pylint.extensions.magic_value",  # highly opinionated
-]
-disable=[
-    "docstring-first-line-empty",  # C0199; not-an-issue
-
-    # Temporary disables
-    "cannot-enumerate-pytest-fixtures",  # ToDo: Our own message, fix first
-    "fixme",  # needs-work, and probably regex
-    "attribute-defined-outside-init",
-    "confusing-consecutive-elif",
-    "duplicate-code",
-    "missing-docstring",
-    "redefined-loop-name",
-    "too-complex",
-    "too-many-arguments",
-    "too-many-nested-blocks",
-    "too-many-try-statements",
-    "unspecified-encoding",
-    "use-maxsplit-arg",
-    "used-before-assignment",
-]
-
-[tool.pylint.design]
-max-args = 7
-
-[tool.pylint.reports]
-output-format = "colorized"
-
-[tool.pylint.variables]
-ignored-argument-names = "_.*"
-
-[tool.pylint."messages control"]
-enable = [
-    "useless-suppression",
-    "use-implicit-booleaness-not-comparison-to-zero",
-    "use-implicit-booleaness-not-comparison-to-string",
-]
+[tool.aliases]
+test = "pytest"

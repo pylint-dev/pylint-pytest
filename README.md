@@ -9,7 +9,6 @@
 [![codecov](https://codecov.io/gh/pylint-dev/pylint-pytest/graph/badge.svg?token=NhZDLKmomd)](https://codecov.io/gh/pylint-dev/pylint-pytest)
 
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/pylint-dev/pylint-pytest/master.svg)](https://results.pre-commit.ci/latest/github/pylint-dev/pylint-pytest/master)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
 [![Pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
