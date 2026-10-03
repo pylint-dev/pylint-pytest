@@ -148,7 +148,12 @@ select = [
     "F",  # pyflakes
     "W",  # pycodestyle
     "B",  # bugbear
+    "C4", # flake8-comprehensions
     "I",  # isort
+    "PIE", # flake8-pie
+    "PT", # flake8-pytest-style
+    "PTH", # flake8-pathlib
+    "RET", # flake8-return
     "RUF", # ruff
     "UP", # pyupgrade
 ]

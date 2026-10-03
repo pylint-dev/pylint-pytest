@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import os
 from abc import ABC
 from pathlib import Path
 from pprint import pprint
@@ -54,14 +53,9 @@ class BasePytestTester(ABC):
     def run_linter(self, enable_plugin):
         self.enable_plugin = enable_plugin
 
-        file_path = os.path.join(
-            get_test_root_path(),
-            "input",
-            self.MSG_ID,
-            self.test_name + ".py",
-        )
+        file_path = get_test_root_path() / "input" / self.MSG_ID / f"{self.test_name}.py"
 
-        with open(file_path) as fin:
+        with file_path.open() as fin:
             content = fin.read()
             module = astroid.parse(content, module_name=self.test_name)
             module.file = fin.name
