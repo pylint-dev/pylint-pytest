@@ -34,6 +34,10 @@ repos:
           - '4'
           - --offset
           - '2'
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.30.0
+    hooks:
+      - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.10
     hooks:
