@@ -14,7 +14,6 @@
 ### Development details / information
 
 * Test against pytest 9 in `tox`.
-
 * Upgraded GitHub Actions (fixes the Codecov upload, which failed GPG verification with `codecov-action` v5.5.2),
   `pre-commit` hooks, and the pinned development dependencies.
 * Removed the unmaintained `pytest-pudb`, which is incompatible with pytest >= 9.1.
