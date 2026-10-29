@@ -23,7 +23,9 @@ class CustomVariablesChecker(VariablesChecker):
         line: int | None = None,
         node: NodeNG | None = None,
         args: Any = None,
-        confidence: Confidence = UNDEFINED,
+        # pylint 4.1.3 accepts the deprecated None, we keep rejecting it
+        # TODO: remove the type: ignore once we require pylint >= 5, which rejects None again
+        confidence: Confidence = UNDEFINED,  # type: ignore[override,unused-ignore]
         col_offset: int | None = None,
         end_lineno: int | None = None,
         end_col_offset: int | None = None,
