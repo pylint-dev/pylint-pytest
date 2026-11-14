@@ -23,6 +23,10 @@ repos:
         exclude: ^tests/(input/|base_tester(|_test).py$)
         args:
           - --pytest-test-first
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.32.0
+    hooks:
+      - id: zizmor
   - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
     rev: 0.2.3
     hooks:
