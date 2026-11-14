@@ -1,10 +1,9 @@
 ---
 codecov:
   notify:
-    # Wait for every job of the tests.yaml matrix (3 OS x 5 Python) before setting
-    # a status, else the first upload alone gets compared to a full base report.
-    after_n_builds: 15
+    # tests.yaml combines the coverage of every job and uploads a single report
+    after_n_builds: 1
 comment:
-  after_n_builds: 15
+  after_n_builds: 1
 ignore:
   - tests/input/**/*.py

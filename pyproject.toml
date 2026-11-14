@@ -189,6 +189,9 @@ ini_options.addopts = "--verbose --cov-config=pyproject.toml --cov-report=html"
 [tool.coverage]
 run.branch = true
 run.data_file = "test_artifacts/.coverage"
+# Record paths relative to the checkout, so data from Linux, macOS and Windows
+# jobs can be combined in one report
+run.relative_files = true
 paths.source = [
   "pylint_pytest/",
 ]
