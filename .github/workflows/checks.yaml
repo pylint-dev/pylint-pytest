@@ -65,6 +65,11 @@ jobs:
       - name: Install Dependencies
         if: steps.cache-venv.outputs.cache-hit != 'true'
         run: make install
+      - name: Install pre-commit dependencies
+        if: steps.cache-precommit.outputs.cache-hit != 'true'
+        run: |
+          . .venv/bin/activate
+          pre-commit install --install-hooks
 
   pylint:
     name: pylint
