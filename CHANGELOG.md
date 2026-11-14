@@ -10,6 +10,13 @@
 * Crash (`AttributeError: 'FixtureManager' object has no attribute '_arg2fixturedefs'`) on every file
   with pytest >= 9.2, which files fixture definitions under the node that registers them
   (https://github.com/pylint-dev/pylint-pytest/issues/163).
+* Crash (`astroid-error`) when pytest itself raises while collecting fixtures, for example on a
+  `pytest_plugins` entry it cannot import from a `conftest.py`, or on a plugin incompatible with the
+  installed pytest. `cannot-enumerate-pytest-fixtures` is now reported instead
+  (https://github.com/pylint-dev/pylint-pytest/issues/126, https://github.com/pylint-dev/pylint-pytest/issues/130).
+* Crash (`ValueError: ... is not in the subpath of ...`) when reporting
+  `cannot-enumerate-pytest-fixtures` for a file outside the current directory. Its absolute path is
+  reported instead.
 
 ### Development details / information
 

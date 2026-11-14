@@ -1,6 +1,7 @@
 import re
 from collections.abc import Sequence
 
+import astroid
 import pytest
 
 from pylint_pytest.checkers.fixture import FixtureChecker
@@ -59,3 +60,28 @@ class TestCannotEnumerateFixtures(BasePytestTester):
             assert msg.args[1]
             # Assert `stderr` is empty (pytest runs stably, even though fixture collection fails).
             assert not msg.args[2]
+
+    def test_pytest_raises(self, tmp_path):
+        """pytest raises instead of returning an exit code: report it, don't crash.
+
+        pytest < 9 raises here, pytest >= 9 returns an exit code. The file is also
+        outside the current directory, which must not crash either.
+
+        https://github.com/pylint-dev/pylint-pytest/issues/126
+        https://github.com/pylint-dev/pylint-pytest/issues/130
+        """
+        conftest = tmp_path / "conftest.py"
+        conftest.write_text('pytest_plugins = ["no_such_banana_plugin"]\n')
+        # Not named ``conftest``: astroid would cache it under that name, and resolve
+        # the ``from conftest import ...`` of the tests that follow to it.
+        module = astroid.parse(conftest.read_text(), module_name="banana_conftest")
+        module.file = str(conftest)
+
+        self.walk(module)
+        self.msgs = self.linter.release_messages()
+
+        self.verify_messages(1)
+        msg = self.msgs[0]
+        assert isinstance(msg.args, Sequence)
+        # The error pytest raised or printed goes in the `stderr` part of the message.
+        assert "no_such_banana_plugin" in msg.args[2]
