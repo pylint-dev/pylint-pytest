@@ -11,11 +11,6 @@ from pylint.checkers import BaseChecker
 from pylint.testutils import MessageTest, UnittestLinter
 from pylint.utils import ASTWalker
 
-import pylint_pytest.checkers.fixture
-
-# XXX: allow all file names
-pylint_pytest.checkers.fixture.FILE_NAME_PATTERNS = ("*",)
-
 
 def get_test_root_path() -> Path:
     """Assumes ``base_tester.py`` is at ``<root>/tests``."""

@@ -154,7 +154,9 @@ def awesome_fixture(): ...
 
 Raise when the plugin cannot enumerate and collect pytest fixtures for analysis
 
-NOTE: this warning is only added to test modules (`test_*.py` / `*_test.py`)
+NOTE: this warning is only added to test modules, as set by the
+[`python_files`](https://docs.pytest.org/en/stable/reference/reference.html#confval-python_files)
+option of pytest (`test_*.py` / `*_test.py` by default)
 
 ```python
 import no_such_package  # <- pylint-pytest plugin cannot enumerate and collect pytest fixtures
