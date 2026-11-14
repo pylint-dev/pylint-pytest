@@ -3,6 +3,7 @@ from __future__ import annotations
 import fnmatch
 import io
 import sys
+import traceback
 from pathlib import Path
 
 import astroid
@@ -22,6 +23,16 @@ FILE_NAME_PATTERNS: tuple[str, ...] = ("test_*.py", "*_test.py")
 ARGUMENT_ARE_KEYWORD_ONLY = (
     "https://docs.pytest.org/en/stable/deprecations.html#pytest-fixture-arguments-are-keyword-only"
 )
+
+
+def _relative_to_cwd(path: str) -> str:
+    """Return ``path`` relative to the current directory, if it is under it."""
+    absolute_path = Path(path).absolute()
+    try:
+        return str(absolute_path.relative_to(Path.cwd()))
+    except ValueError:
+        # Outside the current directory (or on another drive on Windows).
+        return str(absolute_path)
 
 
 class FixtureCollector:
@@ -123,22 +134,35 @@ class FixtureChecker(BasePytestChecker):
 
                 # save and restore sys.path to prevent pytest.main from altering it
                 sys_path = sys.path.copy()
-
-                ret = pytest.main(
-                    [
-                        node.file,
-                        "--fixtures",
-                        "--collect-only",
-                        "--quiet",
-                        "-p",
-                        "no:unraisableexception",
-                        "--pythonwarnings=ignore:Module already imported:pytest.PytestWarning",
-                    ],
-                    plugins=[fixture_collector],
-                )
-
-                # restore sys.path
-                sys.path = sys_path
+                try:
+                    ret = pytest.main(
+                        [
+                            node.file,
+                            "--fixtures",
+                            "--collect-only",
+                            "--quiet",
+                            "-p",
+                            "no:unraisableexception",
+                            "--pythonwarnings=ignore:Module already imported:pytest.PytestWarning",
+                        ],
+                        plugins=[fixture_collector],
+                    )
+                except Exception:  # pylint: disable=broad-exception-caught
+                    # pytest itself can raise instead of returning an exit code, for
+                    # example on a plugin it cannot import while loading a ``conftest.py``.
+                    # Report it, instead of crashing pylint.
+                    self.add_message(
+                        "cannot-enumerate-pytest-fixtures",
+                        args=(
+                            node.file,
+                            captured_stdout.getvalue(),
+                            captured_stderr.getvalue() + traceback.format_exc(),
+                        ),
+                        node=node,
+                    )
+                    return
+                finally:
+                    sys.path = sys_path
 
                 FixtureChecker._pytest_fixtures = fixture_collector.fixtures
 
@@ -155,8 +179,7 @@ class FixtureChecker(BasePytestChecker):
                 }
                 if (ret != pytest.ExitCode.OK or legitimate_failure_paths) and is_test_module:
                     files_to_report = {
-                        str(Path(x).absolute().relative_to(Path.cwd()))
-                        for x in legitimate_failure_paths | {node.file}
+                        _relative_to_cwd(x) for x in legitimate_failure_paths | {node.file}
                     }
 
                     self.add_message(
