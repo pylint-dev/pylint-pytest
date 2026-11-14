@@ -1,0 +1,8 @@
+---
+rules:
+  use-trusted-publishing:
+    # release.yml uploads to PyPI with an API token. Moving to trusted
+    # publishing needs an owner of the project on PyPI to add this
+    # repository as a trusted publisher.
+    ignore:
+      - release.yml
