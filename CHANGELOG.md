@@ -7,9 +7,13 @@
 * Crash (`AttributeError: 'NoneType' object has no attribute 'name'`) with pylint >= 4.1,
   caused by `CustomVariablesChecker.add_message` defaulting `confidence` to `None`.
   `end_lineno` and `end_col_offset` are now also forwarded to pylint instead of being dropped.
+* Crash (`AttributeError: 'FixtureManager' object has no attribute '_arg2fixturedefs'`) on every file
+  with pytest >= 9.2, which files fixture definitions under the node that registers them
+  (https://github.com/pylint-dev/pylint-pytest/issues/163).
 
 ### Development details / information
 
+* Test against pytest 9 in `tox`.
 * Upgraded GitHub Actions (fixes the Codecov upload, which failed GPG verification with `codecov-action` v5.5.2),
   `pre-commit` hooks, and the pinned development dependencies.
 * Removed the unmaintained `pytest-pudb`, which is incompatible with pytest >= 9.1.

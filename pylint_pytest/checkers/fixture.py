@@ -25,13 +25,22 @@ ARGUMENT_ARE_KEYWORD_ONLY = (
 
 
 class FixtureCollector:
-    # Same as ``_pytest.fixtures.FixtureManager._arg2fixturedefs``.
+    # Same as ``_pytest.fixtures.FixtureManager._arg2fixturedefs`` (pytest < 9.2).
     fixtures: FixtureDict = {}
     errors: set[pytest.CollectReport] = set()
 
     def pytest_sessionfinish(self, session):
         # pylint: disable=protected-access
-        self.fixtures = session._fixturemanager._arg2fixturedefs
+        fixturemanager = session._fixturemanager
+        if hasattr(fixturemanager, "_arg2fixturedefs"):
+            self.fixtures = fixturemanager._arg2fixturedefs
+            return
+        # pytest 9.2 files the FixtureDefs of each name under the node that
+        # registers them; group them by name, as `pytest --fixtures` lists them.
+        fixtures: FixtureDict = {}
+        for fixturedef in fixturemanager._get_all_fixture_defs():
+            fixtures.setdefault(fixturedef.argname, []).append(fixturedef)
+        self.fixtures = fixtures
 
     def pytest_collectreport(self, report):
         if report.failed:
