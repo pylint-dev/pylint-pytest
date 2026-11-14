@@ -4,6 +4,7 @@ from astroid.nodes import Assign, Attribute, ClassDef, Name
 
 from ..utils import _can_use_fixture, _is_class_autouse_fixture
 from . import BasePytestChecker
+from .fixture import FixtureChecker
 
 
 class ClassAttrLoader(BasePytestChecker):
@@ -19,7 +20,8 @@ class ClassAttrLoader(BasePytestChecker):
         self.request_cls = set()
         self.class_node = None
 
-        if _can_use_fixture(node) and _is_class_autouse_fixture(node):
+        naming = FixtureChecker._pytest_naming  # pylint: disable=protected-access
+        if _can_use_fixture(node, naming) and _is_class_autouse_fixture(node):
             self.in_setup = True
             self.class_node = node.parent
 

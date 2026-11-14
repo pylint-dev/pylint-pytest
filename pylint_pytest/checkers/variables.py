@@ -82,7 +82,7 @@ class CustomVariablesChecker(VariablesChecker):
         if (
             msgid == "unused-argument"
             and node
-            and _can_use_fixture(node.parent.parent)
+            and _can_use_fixture(node.parent.parent, FixtureChecker._pytest_naming)
             and isinstance(node.parent, Arguments)
         ):
             if node.name in FixtureChecker._pytest_fixtures:
@@ -101,7 +101,7 @@ class CustomVariablesChecker(VariablesChecker):
         if (
             msgid == "redefined-outer-name"
             and node
-            and _can_use_fixture(node.parent.parent)
+            and _can_use_fixture(node.parent.parent, FixtureChecker._pytest_naming)
             and isinstance(node.parent, Arguments)
             and node.name in FixtureChecker._pytest_fixtures
         ):

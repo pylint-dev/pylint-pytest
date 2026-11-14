@@ -1,9 +1,61 @@
+from __future__ import annotations
+
+import fnmatch
 import inspect
+import os
+from collections.abc import Iterable
+from dataclasses import dataclass
+from pathlib import Path
 
 import astroid
 import pylint
 
 PYLINT_VERSION_MAJOR = int(pylint.__version__.split(".")[0])
+
+
+def _matches_file_pattern(path: Path, pattern: str) -> bool:
+    """Match ``path`` like pytest matches a ``python_files`` pattern.
+
+    A pattern without a path separator matches the file name, otherwise the
+    end of the full path (as ``_pytest.pathlib.fnmatch_ex`` does).
+    """
+    if os.sep not in pattern and "/" not in pattern:
+        return fnmatch.fnmatch(path.name, pattern)
+    pattern = pattern.replace("/", os.sep)
+    if not Path(pattern).is_absolute():
+        pattern = f"*{os.sep}{pattern}"
+    return fnmatch.fnmatch(str(path), pattern)
+
+
+def _matches_prefix_or_glob(name: str, options: Iterable[str]) -> bool:
+    """Match ``name`` like pytest matches ``python_classes`` and ``python_functions``."""
+    return any(
+        name.startswith(option)
+        or (any(char in option for char in "*?[") and fnmatch.fnmatch(name, option))
+        for option in options
+    )
+
+
+@dataclass(frozen=True)
+class PytestNaming:
+    """The ``python_files``, ``python_classes`` and ``python_functions`` options of pytest."""
+
+    files: tuple[str, ...] = ("test_*.py", "*_test.py")
+    classes: tuple[str, ...] = ("Test",)
+    functions: tuple[str, ...] = ("test",)
+
+    def is_test_file(self, path: str | Path) -> bool:
+        path = Path(path)
+        return any(_matches_file_pattern(path, pattern) for pattern in self.files)
+
+    def is_test_class(self, name: str) -> bool:
+        return _matches_prefix_or_glob(name, self.classes)
+
+    def is_test_function(self, name: str) -> bool:
+        return _matches_prefix_or_glob(name, self.functions)
+
+
+DEFAULT_NAMING = PytestNaming()
 
 
 def _is_pytest_mark_usefixtures(decorator):
@@ -107,10 +159,10 @@ def _is_class_autouse_fixture(function):
     return False
 
 
-def _can_use_fixture(function):
+def _can_use_fixture(function, naming: PytestNaming = DEFAULT_NAMING):
     if isinstance(function, astroid.FunctionDef):
-        # test_*, *_test
-        if function.name.startswith("test_") or function.name.endswith("_test"):
+        # pytest's ``python_functions`` (``test*`` by default), and ``*_test``
+        if naming.is_test_function(function.name) or function.name.endswith("_test"):
             return True
 
         if function.decorators:

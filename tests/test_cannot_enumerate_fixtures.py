@@ -47,10 +47,11 @@ class TestCannotEnumerateFixtures(BasePytestTester):
             assert isinstance(msg.args, Sequence)
             assert len(msg.args) == 3
 
-            # ... somehow, since `import_corrupted_module.py` imports `no_such_package.py`
-            # both of their names are returned in the message.
+            # Only this module: the collection errors of modules linted before
+            # (like `no_such_package.py`) are not reported again.
             filename_arg = msg.args[0]
-            assert len(re.findall(r"\.py", filename_arg)) == 2
+            assert re.findall(r"\.py", filename_arg) == [".py"]
+            assert "import_corrupted_module.py" in filename_arg
 
             # Asserts that paths are relative (usually to the root of the repository).
             assert not [x for x in filename_arg.split(" ") if x[0] == "/"]

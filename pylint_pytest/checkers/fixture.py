@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import fnmatch
 import io
 import sys
 from pathlib import Path
@@ -10,6 +9,8 @@ import pytest
 from astroid import nodes
 
 from ..utils import (
+    DEFAULT_NAMING,
+    PytestNaming,
     _can_use_fixture,
     _is_pytest_fixture,
     _is_pytest_mark,
@@ -18,33 +19,31 @@ from ..utils import (
 from . import BasePytestChecker
 from .types import FixtureDict
 
-# TODO: support pytest python_files, python_classes and python_functions configuration
-# (also hardcoded in ``_may_hold_pytest_code`` and ``utils._can_use_fixture``)
-FILE_NAME_PATTERNS: tuple[str, ...] = ("test_*.py", "*_test.py")
 ARGUMENT_ARE_KEYWORD_ONLY = (
     "https://docs.pytest.org/en/stable/deprecations.html#pytest-fixture-arguments-are-keyword-only"
 )
+PYTEST_ARGS = (
+    "--collect-only",
+    "--quiet",
+    "-p",
+    "no:unraisableexception",
+    "--pythonwarnings=ignore:Module already imported:pytest.PytestWarning",
+)
 
 
-def _is_test_file(file_path: str) -> bool:
-    name = Path(file_path).name
-    return any(fnmatch.fnmatch(name, pattern) for pattern in FILE_NAME_PATTERNS)
-
-
-def _may_hold_pytest_code(module: nodes.Module) -> bool:
+def _may_hold_pytest_code(module: nodes.Module, naming: PytestNaming) -> bool:
     """Whether pytest could need ``module`` to know its fixtures.
 
     True for ``conftest.py``, a module declaring ``pytest_plugins``, and a
-    module defining fixtures or tests (also catches test files matched by a
-    custom ``python_files`` option).
+    module defining fixtures or tests.
     """
     if Path(module.file).name == "conftest.py" or "pytest_plugins" in module.locals:
         return True
     for child in module.body:
-        if isinstance(child, nodes.ClassDef) and child.name.startswith("Test"):
+        if isinstance(child, nodes.ClassDef) and naming.is_test_class(child.name):
             return True
     for function in module.nodes_of_class(nodes.FunctionDef):
-        if function.name.startswith("test"):
+        if naming.is_test_function(function.name):
             return True
         if function.decorators and any(
             _is_pytest_fixture(decorator) for decorator in function.decorators.nodes
@@ -53,12 +52,37 @@ def _may_hold_pytest_code(module: nodes.Module) -> bool:
     return False
 
 
+class NamingCollector:
+    """Read the naming options of pytest, without collecting (so importing) anything."""
+
+    naming: PytestNaming = DEFAULT_NAMING
+
+    def pytest_configure(self, config):
+        self.naming = PytestNaming(
+            files=tuple(config.getini("python_files")),
+            classes=tuple(config.getini("python_classes")),
+            functions=tuple(config.getini("python_functions")),
+        )
+
+    @pytest.hookimpl(tryfirst=True)
+    def pytest_collection(self, session):  # pylint: disable=no-self-use,unused-argument
+        return True
+
+
 class FixtureCollector:
     # Same as ``_pytest.fixtures.FixtureManager._arg2fixturedefs`` (pytest < 9.2).
     fixtures: FixtureDict = {}
     errors: set[pytest.CollectReport] = set()
 
+    rootpath: Path = Path.cwd()
+
+    def __init__(self) -> None:
+        # Per run: a class-level set would keep the errors of every module linted before
+        self.errors = set()
+
     def pytest_sessionfinish(self, session):
+        config = session.config
+        self.rootpath = getattr(config, "rootpath", None) or Path(str(config.rootdir))
         # pylint: disable=protected-access
         fixturemanager = session._fixturemanager
         if hasattr(fixturemanager, "_arg2fixturedefs"):
@@ -116,6 +140,10 @@ class FixtureChecker(BasePytestChecker):
     _invoked_with_func_args: set[str] = set()
     # Stores all invoked fixtures through @pytest.mark.usefixture(...)
     _invoked_with_usefixtures: set[str] = set()
+    # The naming options of pytest for the module being linted
+    _pytest_naming: PytestNaming = DEFAULT_NAMING
+    # The naming options of pytest, by directory of the linted module
+    _naming_by_directory: dict[Path, PytestNaming] = {}
 
     def close(self):
         """restore & reset class attr for testing"""
@@ -123,6 +151,31 @@ class FixtureChecker(BasePytestChecker):
         FixtureChecker._pytest_fixtures = {}
         FixtureChecker._invoked_with_func_args = set()
         FixtureChecker._invoked_with_usefixtures = set()
+        FixtureChecker._pytest_naming = DEFAULT_NAMING
+        FixtureChecker._naming_by_directory = {}
+
+    @staticmethod
+    def _run_pytest(args, plugin):
+        """Run pytest in-process, keeping its output and its changes to ``sys.path`` out."""
+        stdout, stderr = sys.stdout, sys.stderr
+        sys_path = sys.path.copy()
+        with io.StringIO() as captured_stdout, io.StringIO() as captured_stderr:
+            sys.stdout, sys.stderr = captured_stdout, captured_stderr
+            try:
+                ret = pytest.main(args, plugins=[plugin])
+            finally:
+                sys.stdout, sys.stderr = stdout, stderr
+                sys.path = sys_path
+            return ret, captured_stdout.getvalue(), captured_stderr.getvalue()
+
+    def _naming_for(self, file_path: str) -> PytestNaming:
+        """The naming options of pytest for ``file_path``, read once per directory."""
+        directory = Path(file_path).resolve().parent
+        if directory not in FixtureChecker._naming_by_directory:
+            naming_collector = NamingCollector()
+            self._run_pytest([file_path, *PYTEST_ARGS], naming_collector)
+            FixtureChecker._naming_by_directory[directory] = naming_collector.naming
+        return FixtureChecker._naming_by_directory[directory]
 
     def visit_module(self, node):
         """
@@ -134,73 +187,38 @@ class FixtureChecker(BasePytestChecker):
         FixtureChecker._invoked_with_func_args = set()
         FixtureChecker._invoked_with_usefixtures = set()
 
-        is_test_module = _is_test_file(node.file)
-        if not is_test_module and not _may_hold_pytest_code(node):
+        naming = FixtureChecker._pytest_naming = self._naming_for(node.file)
+        is_test_module = naming.is_test_file(node.file)
+        if not is_test_module and not _may_hold_pytest_code(node, naming):
             # Collecting fixtures imports the module, which runs its top-level
             # code (``__main__.py``, ``setup.py``...). Pylint should not run
             # code that pytest itself would never collect.
             return
 
-        stdout, stderr = sys.stdout, sys.stderr
-        try:
-            with io.StringIO() as captured_stdout, io.StringIO() as captured_stderr:
-                # suppress any future output from pytest
-                sys.stderr = captured_stderr
-                sys.stdout = captured_stdout
+        # run pytest session with customized plugin to collect fixtures
+        fixture_collector = FixtureCollector()
+        ret, stdout, stderr = self._run_pytest(
+            [node.file, "--fixtures", *PYTEST_ARGS], fixture_collector
+        )
+        FixtureChecker._pytest_fixtures = fixture_collector.fixtures
 
-                # run pytest session with customized plugin to collect fixtures
-                fixture_collector = FixtureCollector()
+        # Node ids are relative to the rootdir of pytest, not to the working directory
+        failed_paths = {
+            fixture_collector.rootpath / collection_report.nodeid
+            for collection_report in fixture_collector.errors
+        }
+        legitimate_failure_paths = {path for path in failed_paths if naming.is_test_file(path)}
+        if (ret != pytest.ExitCode.OK or legitimate_failure_paths) and is_test_module:
+            files_to_report = {
+                str(Path(x).absolute().relative_to(Path.cwd()))
+                for x in legitimate_failure_paths | {Path(node.file)}
+            }
 
-                # save and restore sys.path to prevent pytest.main from altering it
-                sys_path = sys.path.copy()
-
-                ret = pytest.main(
-                    [
-                        node.file,
-                        "--fixtures",
-                        "--collect-only",
-                        "--quiet",
-                        "-p",
-                        "no:unraisableexception",
-                        "--pythonwarnings=ignore:Module already imported:pytest.PytestWarning",
-                    ],
-                    plugins=[fixture_collector],
-                )
-
-                # restore sys.path
-                sys.path = sys_path
-
-                FixtureChecker._pytest_fixtures = fixture_collector.fixtures
-
-                legitimate_failure_paths = {
-                    collection_report.nodeid
-                    for collection_report in fixture_collector.errors
-                    if any(
-                        fnmatch.fnmatch(
-                            Path(collection_report.nodeid).name,
-                            pattern,
-                        )
-                        for pattern in FILE_NAME_PATTERNS
-                    )
-                }
-                if (ret != pytest.ExitCode.OK or legitimate_failure_paths) and is_test_module:
-                    files_to_report = {
-                        str(Path(x).absolute().relative_to(Path.cwd()))
-                        for x in legitimate_failure_paths | {node.file}
-                    }
-
-                    self.add_message(
-                        "cannot-enumerate-pytest-fixtures",
-                        args=(
-                            " ".join(files_to_report),
-                            captured_stdout.getvalue(),
-                            captured_stderr.getvalue(),
-                        ),
-                        node=node,
-                    )
-        finally:
-            # restore output devices
-            sys.stdout, sys.stderr = stdout, stderr
+            self.add_message(
+                "cannot-enumerate-pytest-fixtures",
+                args=(" ".join(files_to_report), stdout, stderr),
+                node=node,
+            )
 
     def visit_decorators(self, node):
         """
@@ -247,7 +265,7 @@ class FixtureChecker(BasePytestChecker):
         - save invoked fixtures for later use
         - save used function arguments for later use
         """
-        if _can_use_fixture(node):
+        if _can_use_fixture(node, self._pytest_naming):
             if node.decorators:
                 # check all decorators
                 for decorator in node.decorators.nodes:

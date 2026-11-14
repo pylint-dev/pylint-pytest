@@ -15,6 +15,13 @@
   `setup()`. Fixtures are now only collected for test files, `conftest.py`, and modules that define
   fixtures or tests, or declare `pytest_plugins`
   (https://github.com/pylint-dev/pylint-pytest/issues/68).
+* The `python_files`, `python_classes` and `python_functions` options of pytest are now read from
+  its configuration, instead of assuming `test_*.py` / `*_test.py`, `Test` and `test_`.
+  A file matching a custom `python_files` is now a test module, and a function matching
+  a custom `python_functions` can now use fixtures. Following pytest, a function starting with `test`
+  (not only `test_`) can now use fixtures by default.
+* The files reported by `cannot-enumerate-pytest-fixtures` are now right when the rootdir of pytest is
+  not the working directory, and no longer include collection errors of modules linted before.
 
 ### Development details / information
 
