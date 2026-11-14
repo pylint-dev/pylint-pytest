@@ -10,6 +10,11 @@
 * Crash (`AttributeError: 'FixtureManager' object has no attribute '_arg2fixturedefs'`) on every file
   with pytest >= 9.2, which files fixture definitions under the node that registers them
   (https://github.com/pylint-dev/pylint-pytest/issues/163).
+* Modules that pytest would never collect (for example a `__main__.py` or a `setup.py`) are no longer
+  imported to collect fixtures, which ran their top-level code: pylint printed a CLI's usage, or ran
+  `setup()`. Fixtures are now only collected for test files, `conftest.py`, and modules that define
+  fixtures or tests, or declare `pytest_plugins`
+  (https://github.com/pylint-dev/pylint-pytest/issues/68).
 
 ### Development details / information
 

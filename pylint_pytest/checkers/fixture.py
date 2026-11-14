@@ -7,6 +7,7 @@ from pathlib import Path
 
 import astroid
 import pytest
+from astroid import nodes
 
 from ..utils import (
     _can_use_fixture,
@@ -22,6 +23,33 @@ FILE_NAME_PATTERNS: tuple[str, ...] = ("test_*.py", "*_test.py")
 ARGUMENT_ARE_KEYWORD_ONLY = (
     "https://docs.pytest.org/en/stable/deprecations.html#pytest-fixture-arguments-are-keyword-only"
 )
+
+
+def _is_test_file(file_path: str) -> bool:
+    name = Path(file_path).name
+    return any(fnmatch.fnmatch(name, pattern) for pattern in FILE_NAME_PATTERNS)
+
+
+def _may_hold_pytest_code(module: nodes.Module) -> bool:
+    """Whether pytest could need ``module`` to know its fixtures.
+
+    True for ``conftest.py``, a module declaring ``pytest_plugins``, and a
+    module defining fixtures or tests (also catches test files matched by a
+    custom ``python_files`` option).
+    """
+    if Path(module.file).name == "conftest.py" or "pytest_plugins" in module.locals:
+        return True
+    for child in module.body:
+        if isinstance(child, nodes.ClassDef) and child.name.startswith("Test"):
+            return True
+    for function in module.nodes_of_class(nodes.FunctionDef):
+        if function.name.startswith("test"):
+            return True
+        if function.decorators and any(
+            _is_pytest_fixture(decorator) for decorator in function.decorators.nodes
+        ):
+            return True
+    return False
 
 
 class FixtureCollector:
@@ -105,11 +133,12 @@ class FixtureChecker(BasePytestChecker):
         FixtureChecker._invoked_with_func_args = set()
         FixtureChecker._invoked_with_usefixtures = set()
 
-        is_test_module = False
-        for pattern in FILE_NAME_PATTERNS:
-            if fnmatch.fnmatch(Path(node.file).name, pattern):
-                is_test_module = True
-                break
+        is_test_module = _is_test_file(node.file)
+        if not is_test_module and not _may_hold_pytest_code(node):
+            # Collecting fixtures imports the module, which runs its top-level
+            # code (``__main__.py``, ``setup.py``...). Pylint should not run
+            # code that pytest itself would never collect.
+            return
 
         stdout, stderr = sys.stdout, sys.stderr
         try:
