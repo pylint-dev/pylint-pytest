@@ -18,7 +18,8 @@ from ..utils import (
 from . import BasePytestChecker
 from .types import FixtureDict
 
-# TODO: support pytest python_files configuration
+# TODO: support pytest python_files, python_classes and python_functions configuration
+# (also hardcoded in ``_may_hold_pytest_code`` and ``utils._can_use_fixture``)
 FILE_NAME_PATTERNS: tuple[str, ...] = ("test_*.py", "*_test.py")
 ARGUMENT_ARE_KEYWORD_ONLY = (
     "https://docs.pytest.org/en/stable/deprecations.html#pytest-fixture-arguments-are-keyword-only"
